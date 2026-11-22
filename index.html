@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#221C46">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<title>Pluxee Health Scan</title>
+<style>
+/* =========================================================
+   TOKENS — troque aqui pelo Design System Pluxee
+   Todo o wireframe usa só estas variáveis.
+   ========================================================= */
+:root{
+  /* Tokens do DS Pluxee (Figma: plx/semantic/*) */
+  --c-bg:#FFFFFF;            /* fundo branco (antes background/primary #FAF8FF) */
+  --c-surface:#FFFFFF;
+  --c-surface-2:#F3F3FC;     /* background/info */
+  --c-line:#E2E8F0;          /* Greyscale/200 */
+  --c-line-strong:#B5B2BC;   /* text/disabled */
+  --c-text:#221C46;          /* text/primary · brand/primary */
+  --c-text-2:#463F5F;        /* text/secondary */
+  --c-text-3:#716E7C;        /* text/quaternary */
+  --c-header:#221C46;        /* brand/primary */
+  --c-on-header:#FFFFFF;     /* text/inverse */
+  --c-accent:#00EB5E;        /* brand/secondary */
+  --c-on-accent:#221C46;
+  --c-accent-soft:#C7FCCA;   /* brand/secondary-dimmed */
+  --c-accent-light:#85FD96;  /* brand/secondary-light */
+  --c-accent-strong:#01AD43; /* ultraGreen/6 */
+  --c-info-soft:#DEF3FB;     /* brand/tertiary-dimmed */
+  --c-placeholder:#EDEBF5;
+  --radius:12px;
+  --radius-sm:8px;
+  --space:16px;
+  --font: "TT Travels", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--c-bg);color:var(--c-text);min-height:100vh;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+input{font:inherit}
+
+/* ---------- App em tela cheia (responsivo) ---------- */
+.phone{width:100%;max-width:480px;height:100vh;height:100dvh;margin:0 auto;background:var(--c-bg);position:relative;overflow:hidden}
+@media (min-width:481px){ body{background:#EDEBF5} .phone{box-shadow:0 0 0 1px var(--c-line)} }
+.screen{position:absolute;inset:0;display:flex;flex-direction:column}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{width:0}
+
+
+/* ---------- Notas de design (desktop) ---------- */
+.notes{width:340px;max-height:844px;overflow:auto;background:#fafafa;border:1px solid #999;padding:20px;font-size:13px;line-height:1.5}
+.notes h2{font-size:15px;margin-bottom:4px}
+.notes .sub{color:#666;margin-bottom:14px}
+.notes ol{padding-left:18px}
+.notes li{margin-bottom:10px}
+.notes .tag{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;border:1px solid #888;padding:1px 6px;margin-right:4px}
+.notes .jump{margin-top:16px;border-top:1px solid #ccc;padding-top:12px}
+.notes .jump button{display:block;width:100%;padding:6px 8px;border:1px solid #bbb;margin-bottom:4px;background:#fff;font-size:12px}
+.notes .jump button:hover{background:#eee}
+
+/* ---------- Elementos base ---------- */
+.statusbar{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:14px;font-weight:600;background:var(--c-header);color:var(--c-on-header);flex-shrink:0}
+.statusbar.light{background:var(--c-bg);color:var(--c-text)}
+.topbar{background:var(--c-header);color:var(--c-on-header);padding:6px 16px 14px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar h1{font-size:18px;font-weight:700;flex:1}
+.topbar .sub{font-size:12px;opacity:.7;font-weight:400}
+.iconbtn{width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.iconbtn svg{width:22px;height:22px}
+.logo-ph{width:26px;height:26px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.pad{padding:16px}
+.card{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card.flat{border:0}
+.card.dashed{border:1.5px dashed var(--c-line-strong);background:transparent}
+.card.dark{background:var(--c-header);color:var(--c-on-header);border:0}
+.card.soft{background:var(--c-surface-2);border:0}
+.h2{font-size:17px;font-weight:700;margin-bottom:4px}
+.h3{font-size:15px;font-weight:700}
+.sec{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-text-2);margin:20px 0 10px;display:flex;justify-content:space-between;align-items:center}
+.sec button{text-transform:none;letter-spacing:0;font-weight:600;text-decoration:underline;font-size:13px}
+.muted{color:var(--c-text-2);font-size:13px}
+.tiny{color:var(--c-text-3);font-size:11px}
+.big{font-size:32px;font-weight:800;letter-spacing:-.02em}
+.row{display:flex;align-items:center;gap:12px}
+.row.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 16px;font-weight:700;font-size:15px;border-radius:var(--radius);width:100%}
+.btn.primary{background:var(--c-accent);color:var(--c-on-accent)}
+.btn.secondary{background:var(--c-surface);border:1.5px solid var(--c-text)}
+.btn.ghost{text-decoration:underline;height:40px}
+.btn.sm{height:36px;font-size:13px;width:auto}
+.btn svg{width:18px;height:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--c-line-strong);font-size:12px;font-weight:600;background:var(--c-surface);border-radius:var(--radius);white-space:nowrap}
+.chip.solid{background:var(--c-accent);color:var(--c-on-accent);border-color:var(--c-accent)}
+.chip.dark{background:rgba(0,0,0,.55);color:#fff;border-color:transparent}
+.pill-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border:1px solid currentColor}
+.bar{height:8px;background:var(--c-accent-soft);position:relative;overflow:hidden}
+.bar > i{position:absolute;inset:0 auto 0 0;background:var(--c-accent);display:block}
+.bar.thin{height:5px}
+.bar.light{background:rgba(255,255,255,.25)}
+.bar.light > i{background:#fff}
+.ph{background:var(--c-placeholder);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--c-text-3);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.ph.x::before,.ph.x::after{content:"";position:absolute;width:142%;height:1px;background:var(--c-line-strong);top:50%;left:-21%}
+.ph.x::before{transform:rotate(30deg)}
+.ph.x::after{transform:rotate(-30deg)}
+.ph span{position:relative;background:var(--c-placeholder);padding:2px 6px;z-index:1}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--c-placeholder);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--c-text-2);flex-shrink:0}
+.ico{width:40px;height:40px;background:var(--c-surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ico svg{width:20px;height:20px}
+.ico.lg{width:52px;height:52px}
+.ico.lg svg{width:26px;height:26px}
+.list > *{border-bottom:1px solid var(--c-line);padding:12px 0}
+.list > *:last-child{border-bottom:0}
+.divider{height:1px;background:var(--c-line);margin:12px 0}
+.toggle{width:44px;height:26px;background:var(--c-line);position:relative;flex-shrink:0;border-radius:13px;transition:.2s}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.toggle.on{background:var(--c-accent)}
+.toggle.on::after{left:21px}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:var(--c-accent);display:inline-block}
+
+/* ---------- Bottom nav da feature ---------- */
+.fnav{height:78px;background:var(--c-surface);border-top:1px solid var(--c-line);display:grid;grid-template-columns:repeat(5,1fr);align-items:center;flex-shrink:0;padding-bottom:12px;position:relative}
+.fnav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--c-text-3)}
+.fnav button.on{color:var(--c-text)}
+.fnav button svg{width:22px;height:22px}
+.fnav .scanbtn{width:62px;height:62px;background:var(--c-accent);color:var(--c-on-accent);border-radius:50%;margin:-34px auto 0;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);border:4px solid var(--c-bg)}
+.fnav .scanbtn svg{width:26px;height:26px}
+
+/* ---------- Anel de progresso ---------- */
+.ring{position:relative;width:132px;height:132px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ring .center b{font-size:24px;font-weight:800;line-height:1}
+.ring .center small{font-size:11px;color:var(--c-text-2)}
+
+/* ---------- Câmera ---------- */
+.cam{background:#3a3a3a;color:#fff}
+.cam .viewfinder{flex:1;position:relative;background:repeating-linear-gradient(45deg,#454545 0 12px,#404040 12px 24px);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cam .viewfinder img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam .guide{width:260px;height:260px;border-radius:50%;border:2px dashed rgba(255,255,255,.8);position:relative;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;color:rgba(255,255,255,.85);padding:30px}
+.cam .tips{position:absolute;bottom:16px;left:0;right:0;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:0 12px}
+.cam .ctx{position:absolute;top:12px;left:12px;right:12px}
+.cam .modes{display:flex;justify-content:center;gap:22px;padding:14px 0 6px;font-size:13px;font-weight:700;color:rgba(255,255,255,.55)}
+.cam .modes button.on{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px}
+.cam .shutterrow{display:flex;align-items:center;justify-content:space-around;padding:12px 24px 30px}
+.cam .shutter{width:74px;height:74px;border-radius:50%;border:4px solid #fff;display:flex;align-items:center;justify-content:center}
+.cam .shutter i{width:58px;height:58px;border-radius:50%;background:#fff;display:block}
+.cam .side{width:48px;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;gap:3px}
+.cam .side svg{width:24px;height:24px}
+
+/* ---------- Analisando ---------- */
+.scanline{position:absolute;left:0;right:0;height:3px;background:#fff;box-shadow:0 0 18px #fff;animation:scan 1.6s ease-in-out infinite alternate}
+@keyframes scan{from{top:8%}to{top:90%}}
+.steps li{list-style:none;display:flex;gap:10px;align-items:center;padding:8px 0;font-size:14px;opacity:.35;transition:.3s}
+.steps li.done,.steps li.now{opacity:1}
+.steps li .st{width:20px;height:20px;border:2px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.steps li.done .st{background:currentColor}
+.steps li.done .st::after{content:"✓";color:var(--c-header);font-weight:900}
+
+/* ---------- Bottom sheet / modal ---------- */
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:50;display:flex;align-items:flex-end;animation:fade .2s}
+.overlay.center{align-items:center;justify-content:center;padding:24px}
+.sheet{background:var(--c-surface);width:100%;max-height:88%;overflow:auto;padding:20px 16px 28px;animation:up .25s ease-out}
+.sheet .grab{width:40px;height:4px;background:var(--c-line);margin:-8px auto 14px}
+.dialog{background:var(--c-surface);width:100%;padding:24px;text-align:center;animation:pop .3s ease-out}
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(100%)}}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:-10px;width:8px;height:12px;background:#777;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(900px) rotate(540deg)}}
+
+/* ---------- Push notification ---------- */
+.push{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:10px;right:10px;background:rgba(250,250,250,.97);border:1px solid var(--c-line);padding:12px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.25);border-radius:16px;animation:drop .4s ease-out;cursor:pointer}
+@keyframes drop{from{transform:translateY(-130%)}}
+.push .app{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--c-text-2);margin-bottom:4px}
+.push .app i{width:16px;height:16px;background:var(--c-header);display:inline-block;border-radius:4px}
+
+/* ---------- Toast ---------- */
+.toast{position:absolute;left:16px;right:16px;bottom:96px;background:var(--c-header);color:#fff;padding:12px 14px;font-size:13px;font-weight:600;z-index:70;animation:up .25s ease-out;display:flex;gap:10px;align-items:center}
+
+/* ---------- Gráfico de barras ---------- */
+.bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding-top:10px;position:relative}
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bars .b i{display:block;width:100%;background:var(--c-line-strong)}
+.bars .b.today i{background:var(--c-accent)}
+.bars .b.empty i{background:transparent;border:1.5px dashed var(--c-line-strong)}
+.bars .b small{font-size:11px;color:var(--c-text-2)}
+.bars .goal{position:absolute;left:0;right:0;border-top:1.5px dashed var(--c-text);font-size:10px;color:var(--c-text-2)}
+.bars .goal span{position:absolute;right:0;top:-15px;background:var(--c-surface);padding:0 4px}
+
+/* ---------- Week strip ---------- */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.week div{padding:6px 0;font-size:11px;color:var(--c-text-2)}
+.week div b{display:flex;width:30px;height:30px;margin:4px auto 0;align-items:center;justify-content:center;border:1.5px solid var(--c-line-strong);border-radius:50%;font-size:12px;color:var(--c-text)}
+.week div.done b{background:var(--c-accent);color:var(--c-on-accent);border-color:var(--c-accent)}
+.week div.freeze b{border-style:dashed}
+.week div.today b{border:2px solid var(--c-text);font-weight:800}
+
+/* ---------- Badges ---------- */
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.badgex{text-align:center;font-size:11px;font-weight:600}
+.badgex .medal{width:58px;height:58px;margin:0 auto 6px;border-radius:50%;background:var(--c-accent);color:var(--c-on-accent);display:flex;align-items:center;justify-content:center}
+.badgex .medal svg{width:26px;height:26px}
+.badgex.locked .medal{background:var(--c-surface-2);color:var(--c-text-3);border:1.5px dashed var(--c-line-strong)}
+.badgex.locked{color:var(--c-text-3)}
+
+/* ---------- Mini home Pluxee ---------- */
+.homehead{background:var(--c-header);color:#fff;padding:4px 20px 18px}
+.wallet{background:var(--c-surface);border:1px solid var(--c-line);padding:14px}
+.lunchcard{background:var(--c-surface);border:2px solid var(--c-text);padding:16px;position:relative;margin-top:16px}
+.lunchcard .flag{position:absolute;top:-10px;left:12px;background:var(--c-text);color:#fff;font-size:10px;font-weight:800;letter-spacing:.06em;padding:3px 8px;text-transform:uppercase}
+.hnav{height:74px;background:var(--c-surface);border-top:1px solid var(--c-line);display:grid;grid-template-columns:repeat(5,1fr);flex-shrink:0;padding-bottom:10px}
+.hnav div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:600;color:var(--c-text-3)}
+.hnav div.on{color:var(--c-text)}
+.hnav div i{width:22px;height:22px;border:1.5px solid currentColor;display:block}
+
+/* ---------- Itens do resultado ---------- */
+.item{display:flex;gap:12px;align-items:flex-start}
+.conf{font-size:10px;font-weight:700;padding:2px 6px;border:1px solid var(--c-line-strong)}
+.conf.low{border-style:dashed;border-color:var(--c-text)}
+.segbar{display:flex;height:10px;gap:2px}
+.segbar i{display:block;background:var(--c-text)}
+.segbar i:nth-child(2){background:var(--c-text-2)}
+.segbar i:nth-child(3){background:var(--c-line-strong)}
+.legend{display:flex;gap:14px;font-size:12px;margin-top:8px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px;background:var(--c-text)}
+.legend span:nth-child(2)::before{background:var(--c-text-2)}
+.legend span:nth-child(3)::before{background:var(--c-line-strong)}
+.presets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.presets button{border:1.5px solid var(--c-line-strong);height:40px;font-size:12px;font-weight:700;text-align:center}
+.presets button.on{background:var(--c-accent);color:var(--c-on-accent);border-color:var(--c-accent)}
+input[type=range]{width:100%;accent-color:#1a1a1a}
+.field{border:1.5px solid var(--c-line-strong);height:44px;width:100%;padding:0 12px;background:var(--c-surface)}
+
+/* ---------- Chat LIA ---------- */
+.msg{max-width:85%;padding:10px 12px;font-size:14px;line-height:1.45;margin-bottom:8px}
+.msg.me{background:var(--c-accent);color:var(--c-on-accent);margin-left:auto}
+.msg.bot{background:var(--c-surface-2)}
+.typing{display:inline-flex;gap:4px}
+.typing i{width:6px;height:6px;background:var(--c-text-3);border-radius:50%;animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{50%{opacity:.2}}
+
+/* =========================================================
+   CAMADA PLUXEE (aplicação do DS sobre o wireframe)
+   ========================================================= */
+body{letter-spacing:-.01em}
+.statusbar{background:var(--c-header)}
+.topbar{background:var(--c-header);padding:6px 16px 18px;background-image:radial-gradient(circle at 85% -20%,rgba(0,235,94,.18),transparent 45%)}
+.topbar .iconbtn{background:#fff;color:var(--c-text);border-radius:var(--radius-sm);width:34px;height:34px}
+.topbar .iconbtn svg{width:18px;height:18px}
+.logo-ph{border:0;background:var(--c-accent);color:var(--c-header);border-radius:8px;font-size:15px;font-weight:900;width:28px;height:28px}
+.card{border-radius:var(--radius);border-color:var(--c-line)}
+.card.dashed{border-color:var(--c-line-strong);background:transparent}
+.card.soft{background:var(--c-surface-2)}
+.card.dark{background:var(--c-header);background-image:radial-gradient(circle at 100% 0,rgba(0,235,94,.22),transparent 55%)}
+.h2,.h3,.big{color:inherit}
+.sec{text-transform:none;letter-spacing:-.01em;font-size:15px;color:var(--c-text);font-weight:700}
+.sec button{color:#1E4FD8;text-decoration:none}
+.btn{border-radius:var(--radius)}
+.btn.primary{background:var(--c-accent);color:var(--c-on-accent)}
+.btn.primary.deep{background:var(--c-header);color:#fff}
+.btn.secondary{border-color:var(--c-text);color:var(--c-text)}
+.btn.ghost{color:var(--c-text);text-decoration:none}
+.btn.danger{color:#D92D20}
+.bars .b.empty i{background:transparent}
+.chip{border:0;background:var(--c-surface-2);color:var(--c-text-2);border-radius:var(--radius-sm);padding:6px 10px}
+.chip.solid{background:var(--c-header);color:#fff}
+.chip.dark{background:rgba(34,28,70,.75);color:#fff;border-radius:999px}
+.pill-tag{border:0;background:var(--c-accent-soft);color:var(--c-text);border-radius:6px;padding:3px 7px}
+.bar{background:var(--c-line);border-radius:99px}
+.bar > i{background:var(--c-accent);border-radius:99px}
+.bar.light{background:rgba(255,255,255,.18)}
+.bar.light > i{background:var(--c-accent)}
+.ph{background:var(--c-placeholder);border-radius:var(--radius-sm);color:var(--c-text-3)}
+.ph span{background:var(--c-placeholder)}
+.ph.x::before,.ph.x::after{background:#D6D3E4}
+.ico{background:var(--c-accent-soft);color:var(--c-text);border-radius:50%}
+.avatar{background:var(--c-accent);color:var(--c-header)}
+.toggle.on{background:var(--c-accent-strong)}
+.badge-dot{background:var(--c-accent)}
+.list > *{border-color:var(--c-line)}
+.conf{border:0;background:var(--c-accent-soft);border-radius:6px;color:var(--c-text)}
+.conf.low{background:#FFF1C2;border:0}
+.segbar{border-radius:99px;overflow:hidden}
+.segbar i{background:var(--c-header)}
+.segbar i:nth-child(2){background:var(--c-accent)}
+.segbar i:nth-child(3){background:var(--c-line-strong)}
+.legend span::before{background:var(--c-header);border-radius:50%}
+.legend span:nth-child(2)::before{background:var(--c-accent)}
+.legend span:nth-child(3)::before{background:var(--c-line-strong)}
+.presets button{border-radius:var(--radius-sm);border-color:var(--c-line)}
+.presets button.on{background:var(--c-header);color:#fff;border-color:var(--c-header)}
+.field{border-radius:var(--radius-sm);border-color:var(--c-line)}
+input[type=range]{accent-color:var(--c-accent-strong)}
+.bars .b i{background:var(--c-accent-soft);border-radius:6px 6px 0 0}
+.bars .b.today i{background:var(--c-accent)}
+.bars .goal{border-top-color:var(--c-header)}
+.week div.done b{background:var(--c-accent);color:var(--c-header);border-color:var(--c-accent)}
+.week div.today b{border-color:var(--c-header)}
+.badgex .medal{background:var(--c-accent);color:var(--c-header)}
+.badgex.locked .medal{background:var(--c-surface-2);border-color:var(--c-line-strong)}
+.toast{background:var(--c-header);border-radius:var(--radius)}
+.toast svg{color:var(--c-accent)}
+.sheet{border-radius:24px 24px 0 0}
+.sheet .grab{background:var(--c-line);border-radius:4px}
+.dialog{border-radius:20px}
+.msg{border-radius:16px}
+.msg.me{background:var(--c-header);color:#fff;border-bottom-right-radius:4px}
+.msg.bot{background:var(--c-surface-2);border-bottom-left-radius:4px}
+.push{border-radius:18px}
+.push .app i{background:var(--c-accent);border-radius:5px}
+/* nav flutuante da feature (padrão do app) */
+.fnav{background:transparent;border-top:0;height:auto;padding:0 14px 16px;display:block;position:absolute;left:0;right:0;bottom:0;z-index:20;pointer-events:none}
+.fnav .pillnav{pointer-events:auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:64px;background:rgba(250,248,255,.7);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-radius:999px;box-shadow:0 8px 24px rgba(34,28,70,.12);border:1px solid #EFEFEF}
+.fnav button{color:var(--c-text-3)}
+.fnav button.on{color:var(--c-text);font-weight:800}
+.fnav .scanbtn{width:58px;height:58px;margin:-26px auto 0;background:var(--c-accent);color:var(--c-header);border:4px solid var(--c-bg);box-shadow:0 6px 16px rgba(0,173,67,.35)}
+.screen .scroll{padding-bottom:84px}
+/* home Pluxee */
+.homehead{background:var(--c-header);padding:4px 20px 22px;background-image:radial-gradient(circle at 90% 0,rgba(0,235,94,.15),transparent 50%)}
+.wallet{border-radius:var(--radius);border-color:var(--c-line)}
+.wallet .ico{width:32px;height:32px;margin-bottom:8px}
+.wallet .ico svg{width:16px;height:16px}
+.paycard{height:118px;background:var(--c-accent);border-radius:14px;position:relative;padding:14px;color:var(--c-header);overflow:hidden}
+.paycard b{font-size:20px;font-weight:900;position:absolute;right:14px;top:10px;letter-spacing:-.03em}
+.paycard .x{font-size:44px;font-weight:900;line-height:1}
+.paycard small{position:absolute;left:14px;bottom:30px;font-weight:700;font-size:12px}
+.paycard .rec{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.08);font-size:11px;padding:5px 14px;font-style:italic}
+.lunchcard{background:var(--c-accent);border:0;border-radius:16px;color:var(--c-header);overflow:hidden;background-image:linear-gradient(120deg,transparent 55%,rgba(255,255,255,.22) 55%,rgba(255,255,255,.22) 70%,transparent 70%)}
+.lunchcard .muted{color:var(--c-header);opacity:.85}
+.lunchcard .h3{font-size:26px;font-weight:900;line-height:1.05;letter-spacing:-.03em;margin:4px 0 6px}
+.lunchcard .ico{background:var(--c-header);color:var(--c-accent)}
+.lunchcard .chip{background:rgba(255,255,255,.55);color:var(--c-header)}
+.lunchcard .btn.primary{background:var(--c-header);color:#fff}
+.hnav{background:transparent;border:0;padding:0 14px 16px;height:auto;display:block}
+.hnav .pillnav{display:grid;grid-template-columns:repeat(4,1fr);height:62px;background:rgba(255,255,255,.92);border-radius:999px;box-shadow:0 8px 28px rgba(34,28,70,.16);border:1px solid var(--c-line)}
+.hnav .pillnav div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:600;color:var(--c-text-3)}
+.hnav .pillnav div.on{color:var(--c-text);font-weight:800}
+.hnav .pillnav svg{width:20px;height:20px}
+/* câmera e análise */
+.cam{background:#14102b}
+.cam .statusbar{background:#14102b}
+.cam .viewfinder{background:repeating-linear-gradient(45deg,#2a2550 0 12px,#262148 12px 24px)}
+.cam .guide{border-color:var(--c-accent)}
+.cam .modes button.on{border-bottom-color:var(--c-accent)}
+.cam .shutter{border-color:var(--c-accent)}
+.scanline{background:var(--c-accent);box-shadow:0 0 18px var(--c-accent)}
+.steps li.done .st{background:var(--c-accent);border-color:var(--c-accent)}
+.steps li.done .st::after{color:var(--c-header)}
+.confetti i{border-radius:2px}
+
+/* home atual (Home App - 3C) */
+.hx-head{background:linear-gradient(var(--c-header) 0, var(--c-header) 62%, var(--c-bg) 62%);color:#fff}
+.hx-i{width:24px;height:24px;display:inline-flex}
+.hx-cards{display:flex;gap:16px;padding:0 0 0 80px;overflow:hidden}
+.hx-card{flex:0 0 216px;width:216px;height:auto;display:block;border-radius:12px}
+.hx-card.peek{flex:0 0 232px;width:232px;margin-top:-8px;margin-left:-8px;border-radius:0}
+.paycard.dark{background:#0D5B2E;color:#fff}
+.paycard.dark .x{color:#fff}
+.hx-dots{display:flex;gap:6px;justify-content:center;padding:10px 0 4px}
+.hx-dots i{width:6px;height:6px;border-radius:3px;background:var(--c-line-strong);display:block}
+.hx-dots i.on{width:14px;background:var(--c-accent)}
+.hx-hscroll{display:flex;gap:10px;overflow-x:auto;padding:0 24px 4px}
+.hx-hscroll::-webkit-scrollbar{height:0}
+.hx-wallet{flex:0 0 146px;background:#fff;border:1px solid var(--c-line);border-radius:12px;padding:14px 16px}
+.hx-wallet .ico{width:30px;height:30px}.hx-wallet .ico svg{width:16px;height:16px}
+.hx-actions{margin-top:18px;text-align:center}
+.hx-actions div{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px}
+.hx-act{width:56px;height:56px;border:1px solid var(--c-line);border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center}
+.hx-act svg{width:22px;height:22px}
+.hx-banner{background:var(--c-accent);border-radius:6px;height:168px;position:relative;overflow:hidden;padding:30px 16px;color:var(--c-header);background-image:linear-gradient(135deg,transparent 60%,var(--c-accent-light) 60%)}
+.hx-bannerimg{display:block;width:100%;height:auto;border-radius:8px}
+.hx-bt{font-size:26px;font-weight:900;line-height:1.02;letter-spacing:-.03em}
+.hx-bimg{position:absolute;right:0;top:0;bottom:0;width:150px;border-radius:0;background:rgba(255,255,255,.35)}
+.hx-bimg span{background:transparent}
+.hx-place{flex:0 0 96px;background:#fff;border:1px solid var(--c-line);border-radius:12px;padding:14px 8px;text-align:center;font-size:12px;line-height:1.3}
+.hx-novos{display:flex;gap:16px;overflow-x:auto;padding:0 24px 4px}
+.hx-novos::-webkit-scrollbar{height:0}
+.hx-novo{flex:0 0 74px;width:74px;text-align:center;font-size:12px;font-weight:600;line-height:1.35;letter-spacing:-.05px;color:var(--c-text)}
+.hx-tile{width:74px;height:74px;background:var(--c-info-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--c-text);font-size:18px;font-weight:600}
+.hx-tile svg{width:24px;height:24px}
+.hx-tile.sm svg{width:20px;height:20px}
+.hx-fab{position:absolute;right:20px;bottom:100px;width:56px;height:56px;border-radius:50%;background:var(--c-accent-light);color:var(--c-header);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.15);z-index:5}
+.hx-fab svg{width:24px;height:24px}
+.lunchcard{margin-top:22px;background:var(--c-header);color:#fff;background-image:radial-gradient(circle at 100% 0,rgba(0,235,94,.28),transparent 55%)}
+.lunchcard .muted{color:#fff;opacity:.8}
+.lunchcard .tiny{color:var(--c-accent)!important}
+.lunchcard .chip{background:rgba(255,255,255,.12);color:#fff}
+.lunchcard .btn.primary{background:var(--c-accent);color:var(--c-header)}
+.lia-av{width:44px;height:44px;object-fit:contain;flex-shrink:0}
+.botrow{display:flex;gap:6px;align-items:flex-end;margin-bottom:8px}
+.botrow img{width:30px;height:30px;object-fit:contain;flex-shrink:0}
+.botrow .msg{margin-bottom:0}
+.appbar{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:343px;height:84px;z-index:6;border-radius:42px;box-shadow:0 8px 24px rgba(34,28,70,.12)}
+.appbar::before{content:"";position:absolute;inset:0;border-radius:42px;-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);background:rgba(250,248,255,.35)}
+.appbar svg{position:relative;display:block;width:343px;height:84px}
+.safetop{height:env(safe-area-inset-top,0px);min-height:8px;background:var(--c-header);flex-shrink:0}
+.cam .safetop{background:#14102b}
+.safetop.light{background:var(--c-bg)}
+.fnav{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.appbar{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.hx-fab{bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+.toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+@media (max-width:370px){ .appbar{transform:translateX(-50%) scale(.92);transform-origin:bottom center} }
+/* card Health Scan na home (cores de comida) */
+.hscard{margin-top:22px;border-radius:20px;padding:18px;color:#fff;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 105% -5%,rgba(255,138,42,.55),transparent 48%),radial-gradient(circle at -5% 110%,rgba(0,235,94,.28),transparent 50%),linear-gradient(150deg,#2E2560 0%,#221C46 60%);
+  box-shadow:0 10px 24px rgba(34,28,70,.22)}
+.hscard::after{content:"";position:absolute;right:-30px;top:60px;width:150px;height:150px;border-radius:50%;border:14px solid rgba(255,138,42,.14)}
+.hs-top{display:flex;gap:12px;align-items:center;position:relative;z-index:1}
+.hs-icon{width:64px;height:64px;border-radius:16px;box-shadow:0 6px 16px rgba(242,85,10,.45);flex-shrink:0}
+.hs-icon svg{display:block}
+.hs-new{display:inline-block;background:var(--c-accent);color:var(--c-header);font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;margin-bottom:4px}
+.hs-name{font-size:24px;line-height:1.02;font-weight:500;letter-spacing:-.03em;align-self:center}
+.hs-name b{font-weight:900;display:block;font-size:30px;background:linear-gradient(90deg,#FFB070 0%,#FF8A2A 45%,#85FD96 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hs-headline{font-size:16px;font-weight:700;line-height:1.3;margin:14px 0 12px;position:relative;z-index:1;max-width:290px}
+.hs-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;position:relative;z-index:1}
+.hs-steps span{display:flex;align-items:center;justify-content:center;gap:4px;background:rgba(255,255,255,.10);border-radius:999px;padding:7px 4px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.hs-steps svg{flex-shrink:0}
+.hs-foods{display:flex;align-items:center;margin-top:14px;position:relative;z-index:1}
+.hs-foods img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-right:-10px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.hs-foods span{margin-left:18px;font-size:12px;font-weight:700;opacity:.95}
+.hs-cta{position:relative;z-index:1;margin-top:16px;width:100%;height:52px;border-radius:14px;background:var(--c-accent);color:var(--c-header);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 16px rgba(0,173,67,.35)}
+.hs-cta svg{width:20px;height:20px}
+.hs-tile{width:74px;height:74px;border-radius:8px;overflow:hidden;margin-bottom:16px;display:block}
+.hs-tile svg{width:74px;height:74px;display:block}
+#camvideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#14102b}
+.camerr{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:24px;background:rgba(20,16,43,.85);z-index:2}
+.camerr .btn.primary{display:flex}
+.flash{position:absolute;inset:0;background:#fff;z-index:80;animation:flash .35s ease-out forwards;pointer-events:none}
+@keyframes flash{from{opacity:.9}to{opacity:0}}
+.hs-stat{flex-direction:column;gap:2px!important;border-radius:12px!important;padding:8px 4px!important;white-space:normal!important}
+.hs-stat small{font-size:10.5px;font-weight:600;opacity:.75}
+.hs-stat b{font-size:14px;font-weight:800;display:flex;align-items:center;gap:4px}
+.hs-foods span{line-height:1.3;display:block;text-align:left}
+.hidden{display:none!important}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mb8{margin-bottom:8px}
+.center{text-align:center}
+.nomargin{margin:0}
+.u{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div id="app"></div>
+  <div id="layer"></div>
+</div>
+
+
+
+<script>
+/* =========================================================
+   DADOS — tudo mockado. Em produção vem do perfil Pluxee,
+   das transações do cartão e do backend de IA (analyze-food).
+   ========================================================= */
+const USER = {
+  nome: "Nilson", sobrenome: "Teixeira", iniciais: "NT",
+  empresa: "Klabin S.A", time: "Time Klabin · Unidade Paulista",
+  saldoRefeicao: 1300.00, saldoAlimentacao: 1300.00,
+  metaDia: 2100, metaAlmoco: 750,
+  metaPassos: 8000
+};
+/* Sugestões por geolocalização no momento da foto (mock). Em produção: lat/long do aparelho x rede de estabelecimentos Pluxee. */
+const PLACES = [
+  { id:"p1", nome:"Restaurante Bom Prato", tipo:"Restaurante · rede Pluxee", dist:"40 m" },
+  { id:"p2", nome:"Quebec Bar", tipo:"Bar e restaurante · rede Pluxee", dist:"70 m" },
+  { id:"p3", nome:"Restaurante Coqueiro II", tipo:"Restaurante · rede Pluxee", dist:"80 m" }
+];
+
+/* Resultados de análise simulados. Cada foto nova usa o próximo da lista. */
+const DEMOS = [
+  { photo:"assets/pratos/hoje.jpg", hora:"12:41", items:[
+    { label:"Arroz branco", conf:0.94, g:150, kcal:192, c:42, p:4, f:0.3, cor:"branco" },
+    { label:"Feijão carioca", conf:0.91, g:100, kcal:76, c:14, p:5, f:0.5, cor:"marrom" },
+    { label:"Frango grelhado", conf:0.88, g:120, kcal:190, c:0, p:38, f:4, cor:"bege" },
+    { label:"Salada de alface e tomate", conf:0.83, g:60, kcal:12, c:2, p:1, f:0, cor:"verde" },
+    { label:"Farofa", conf:0.55, g:30, kcal:120, c:20, p:1, f:4, cor:"amarelo" } ]},
+  { photo:"assets/pratos/seg.jpg", hora:"12:33", items:[
+    { label:"Arroz branco", conf:0.93, g:130, kcal:166, c:36, p:3, f:0.3, cor:"branco" },
+    { label:"Feijão preto", conf:0.9, g:100, kcal:77, c:14, p:5, f:0.5, cor:"preto" },
+    { label:"Carne assada", conf:0.84, g:100, kcal:220, c:0, p:28, f:12, cor:"marrom" },
+    { label:"Rúcula", conf:0.86, g:40, kcal:10, c:1, p:1, f:0, cor:"verde" },
+    { label:"Omelete", conf:0.78, g:60, kcal:90, c:1, p:6, f:7, cor:"amarelo" },
+    { label:"Linguiça", conf:0.59, g:40, kcal:120, c:1, p:6, f:10, cor:"vermelho" } ]},
+  { photo:"assets/pratos/ter.jpg", hora:"12:22", items:[
+    { label:"Peixe grelhado", conf:0.89, g:140, kcal:200, c:0, p:38, f:5, cor:"branco" },
+    { label:"Purê de batata", conf:0.81, g:120, kcal:140, c:22, p:3, f:5, cor:"bege" },
+    { label:"Brócolis", conf:0.92, g:80, kcal:28, c:5, p:3, f:0, cor:"verde" },
+    { label:"Limão", conf:0.9, g:20, kcal:6, c:2, p:0, f:0, cor:"amarelo" },
+    { label:"Molho de ervas", conf:0.57, g:20, kcal:50, c:1, p:0, f:5, cor:"verde" } ]},
+  { photo:"assets/pratos/qua.jpg", hora:"13:15", items:[
+    { label:"Bife acebolado", conf:0.87, g:150, kcal:310, c:4, p:40, f:15, cor:"marrom" },
+    { label:"Arroz branco", conf:0.92, g:150, kcal:192, c:42, p:4, f:0.3, cor:"branco" },
+    { label:"Feijão carioca", conf:0.9, g:100, kcal:76, c:14, p:5, f:0.5, cor:"marrom" },
+    { label:"Batata frita", conf:0.58, g:80, kcal:250, c:28, p:3, f:14, cor:"amarelo" } ]},
+  { photo:"assets/pratos/qui.jpg", hora:"12:51", items:[
+    { label:"Feijoada", conf:0.9, g:250, kcal:520, c:18, p:32, f:34, cor:"preto" },
+    { label:"Arroz branco", conf:0.93, g:120, kcal:154, c:34, p:3, f:0.2, cor:"branco" },
+    { label:"Couve refogada", conf:0.88, g:50, kcal:45, c:4, p:1, f:3, cor:"verde" },
+    { label:"Laranja", conf:0.8, g:80, kcal:37, c:9, p:1, f:0, cor:"laranja" },
+    { label:"Farofa", conf:0.62, g:25, kcal:100, c:17, p:1, f:3, cor:"amarelo" } ]}
+];
+
+const SOURCES = [
+  { id:"apple", t:"Apple Saúde", d:"iPhone e Apple Watch", watch:true, weight:true },
+  { id:"google", t:"Health Connect", d:"Android, Google Fit, Fitbit", watch:true, weight:true },
+  { id:"samsung", t:"Samsung Health", d:"Galaxy Watch", watch:true },
+  { id:"garmin", t:"Garmin Connect", d:"Relógios Garmin", watch:true },
+  { id:"scale", t:"Balança inteligente", d:"Peso e bioimpedância", weight:true }
+];
+
+const LEVELS = [
+  { min:0, name:"Iniciante" }, { min:100, name:"Curioso do Prato" }, { min:250, name:"Explorador do Prato" },
+  { min:500, name:"Mestre do Prato" }, { min:800, name:"Lenda do Prato" }, { min:99999, name:"" }
+];
+
+/* Missões: progresso calculado a partir do que a pessoa fez */
+const MISSIONS = [
+  { id:"first", grp:"jornada", t:"Primeira foto", d:"Fotografe seu primeiro prato", xp:30, tot:1, badge:"Primeira foto", prog:() => S.meals.length },
+  { id:"goal", grp:"jornada", t:"Defina seu objetivo", d:"Libera sua meta diária de calorias", xp:20, tot:1, prog:() => S.goal ? 1 : 0, act:"editGoal" },
+  { id:"conn", grp:"jornada", t:"Registre peso ou passos", d:"Seus passos viram kcal ativas no seu dia", xp:20, tot:1, prog:() => anySource() ? 1 : 0, act:"healthLog" },
+  { id:"label", grp:"jornada", t:"Leia um rótulo", d:"Use o modo Rótulo da câmera", xp:10, tot:1, badge:"Leitor de rótulos", prog:() => S.rotulo ? 1 : 0, act:"camRotulo" },
+  { id:"lia", grp:"jornada", t:"Pergunte à LIA", d:"Peça uma sugestão de prato antes de pedir", xp:10, tot:1, prog:() => S.liaAsked ? 1 : 0, act:"lia" },
+  { id:"color", grp:"semana", t:"Semana Colorida", d:"3 almoços com 4 cores ou mais no prato", xp:60, tot:3, badge:"Arco-íris", prog:() => S.meals.filter(m => cores(m) >= 4).length },
+  { id:"explore", grp:"semana", t:"Explorador da Rede", d:"Almoce em 3 restaurantes diferentes da rede", xp:40, tot:3, badge:"Explorador", prog:() => new Set(S.meals.map(m => m.local).filter(Boolean)).size },
+  { id:"streak5", grp:"semana", t:"5 dias seguidos", d:"Registre o almoço 5 dias úteis seguidos", xp:50, tot:5, badge:"Sequência 5", prog:() => streak() },
+  { id:"ten", grp:"semana", t:"Dez almoços", d:"Registre 10 almoços no Health Scan", xp:100, tot:10, badge:"Dez almoços", prog:() => S.meals.length }
+];
+const BADGES = [
+  { t:"Primeira foto", ic:"camera", d:"Primeiro prato fotografado" },
+  { t:"Leitor de rótulos", ic:"tag", d:"Primeiro rótulo lido" },
+  { t:"Arco-íris", ic:"leaf", d:"3 almoços coloridos" },
+  { t:"Explorador", ic:"map", d:"3 restaurantes diferentes" },
+  { t:"Sequência 5", ic:"flame", d:"5 dias seguidos" },
+  { t:"Dez almoços", ic:"star", d:"10 almoços registrados" },
+  { t:"Sequência 30", ic:"flame", d:"30 dias seguidos" },
+  { t:"Time campeão", ic:"users", d:"Time em 1º no desafio" }
+];
+const TEAM_BASE = [
+  { nome:"Time Klabin · Unidade Ortigueira", pts:520 },
+  { nome:"Time Klabin · Unidade Paulista", pts:430, me:true },
+  { nome:"Time Klabin · Unidade Monte Alegre", pts:390 }
+];
+
+/* =========================================================
+   ESTADO (começa vazio e é salvo no navegador)
+   ========================================================= */
+const STORE = "pluxee_meal_scan_v2";
+const fresh = () => ({
+  screen:"home", xp:0, day:0, meals:[], done:{}, badges:[],
+  goal:null, pesos:[], passos:{}, rotulo:false, liaAsked:false, semNumeros:false,
+  demoIdx:0, meal:null, viewing:null, photo:null, camMode:"prato", placeId:null, pushShown:false
+});
+let S = fresh();
+try { const saved = JSON.parse(localStorage.getItem(STORE) || "null"); if (saved) S = Object.assign(fresh(), saved, { screen:"home", meal:null, viewing:null, photo:null, pushShown:false }); } catch (e) {}
+function persist() {
+  const { meal, viewing, photo, label, menu, anError, ...keep } = S;
+  try { localStorage.setItem(STORE, JSON.stringify(keep)); }
+  catch (e) {
+    // armazenamento cheio: guarda o progresso trocando as fotos enviadas pelas ilustrativas
+    try {
+      const light = { ...keep, meals: keep.meals.map((m, i) => m.photo && m.photo.startsWith("data:") ? { ...m, photo: DEMOS[i % DEMOS.length].photo } : m) };
+      localStorage.setItem(STORE, JSON.stringify(light));
+    } catch (e2) {}
+  }
+}
+
+/* ---------- regras ---------- */
+const WEEKDAYS = ["Segunda","Terça","Quarta","Quinta","Sexta"];
+const SHORT = ["Seg","Ter","Qua","Qui","Sex"];
+function dayInfo(i) {
+  const d = new Date(2026, 10, 16); // segunda, 16/11/2026
+  d.setDate(d.getDate() + Math.floor(i / 5) * 7 + (i % 5));
+  const meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+  return { wd:i % 5, long:`${WEEKDAYS[i % 5]}, ${d.getDate()} de ${meses[d.getMonth()]}`, short:`${SHORT[i % 5]}, ${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}`, week:Math.floor(i / 5) };
+}
+const totalsOf = (items) => items.reduce((a, it) => ({ kcal:a.kcal+it.kcal, c:a.c+it.c, p:a.p+it.p, f:a.f+it.f }), { kcal:0, c:0, p:0, f:0 });
+const cores = (m) => new Set(m.items.map(i => i.cor)).size;
+const mealOfDay = (d) => S.meals.find(m => m.day === d);
+const registeredToday = () => !!mealOfDay(S.day);
+function streak() {
+  let d = registeredToday() ? S.day : S.day - 1, n = 0;
+  while (d >= 0 && mealOfDay(d)) { n++; d--; }
+  return n;
+}
+/* Dados de saúde informados pela própria pessoa (entrada manual, funciona no navegador) */
+const passosHoje = () => (S.passos && S.passos[S.day]) || 0;
+const pesoAtual = () => S.pesos && S.pesos.length ? S.pesos[S.pesos.length - 1].kg : (S.goal ? S.goal.peso : 0);
+const anySource = () => (S.pesos && S.pesos.length > 0) || Object.values(S.passos || {}).some(n => n > 0);
+const hasWatch = () => passosHoje() > 0;
+const hasWeight = () => S.pesos && S.pesos.length > 0;
+/* estimativa simples: cerca de 0,5 kcal por kg de peso a cada mil passos */
+const kcalAtivas = () => Math.round(passosHoje() * (pesoAtual() || 75) * 0.0005);
+const fmt1 = (n) => n.toFixed(1).replace(".", ",");
+function level() {
+  let i = 0; while (S.xp >= LEVELS[i + 1].min) i++;
+  return { n:i + 1, name:LEVELS[i].name, base:LEVELS[i].min, next:LEVELS[i + 1].min };
+}
+function teamRank() {
+  return TEAM_BASE.map(t => ({ ...t, pts: t.pts + (t.me ? S.meals.length * 20 : 0) })).sort((a, b) => b.pts - a.pts).map((t, i) => ({ ...t, pos:i + 1 }));
+}
+/* Concede missões cumpridas e devolve o que foi ganho */
+function checkMissions() {
+  const gained = [];
+  MISSIONS.forEach(m => {
+    if (!S.done[m.id] && m.prog() >= m.tot) {
+      S.done[m.id] = true; S.xp += m.xp; gained.push(m);
+      if (m.badge && !S.badges.includes(m.badge)) S.badges.push(m.badge);
+    }
+  });
+  return gained;
+}
+function celebrateQuick(gained) {
+  if (!gained.length) return;
+  confetti();
+  gained.forEach((m, i) => setTimeout(() => toast(`Missão concluída: ${m.t} · +${m.xp} XP${m.badge ? " · medalha " + m.badge : ""}`, IC.trophy), i * 2700));
+}
+const pts = () => S.xp; // pontos acumulados = XP total
+const imc = () => S.goal ? pesoAtual() / (S.goal.altura * S.goal.altura) : 0;
+
+/* =========================================================
+   ÍCONES (traço simples, wireframe)
+   ========================================================= */
+const I = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC = {
+  back: I('<path d="M15 18l-6-6 6-6"/>'),
+  close: I('<path d="M6 6l12 12M18 6L6 18"/>'),
+  camera: I('<path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/>'),
+  home: I('<path d="M3 11l9-7 9 7v9H3z"/>'),
+  hist: I('<rect x="4" y="5" width="16" height="15"/><path d="M4 10h16M9 3v4M15 3v4"/>'),
+  trophy: I('<path d="M7 4h10v5a5 5 0 01-10 0z"/><path d="M7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3M12 14v4M8 20h8"/>'),
+  heart: I('<path d="M12 20s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.5-7 10-7 10z"/>'),
+  flame: I('<path d="M12 21c4 0 6-2.7 6-6 0-4-3-6-4-9-1 2-2 3-3 3 0-2-1-4-1-6-3 3-4 6.5-4 10 0 4.3 2.7 8 6 8z"/>'),
+  gallery: I('<rect x="3" y="5" width="18" height="14"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>'),
+  bolt: I('<path d="M13 3L5 13h6l-1 8 8-10h-6z"/>'),
+  edit: I('<path d="M4 20h4L19 9l-4-4L4 16z"/>'),
+  check: I('<path d="M5 12l5 5 9-10"/>'),
+  leaf: I('<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l7-7"/>'),
+  map: I('<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>'),
+  tag: I('<path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.3"/>'),
+  target: I('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/>'),
+  users: I('<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c2.9.4 5 2.8 5 5.8"/>'),
+  lock: I('<rect x="5" y="11" width="14" height="10"/><path d="M8 11V8a4 4 0 018 0v3"/>'),
+  watch: I('<rect x="7" y="6" width="10" height="12"/><path d="M9 6V2h6v4M9 18v4h6v-4"/>'),
+  scale: I('<rect x="3" y="4" width="18" height="16"/><path d="M8 10a4 4 0 018 0z"/>'),
+  chat: I('<path d="M4 5h16v11H9l-5 4z"/>'),
+  menu: I('<path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/>'),
+  info: I('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'),
+  gift: I('<rect x="3" y="9" width="18" height="12"/><path d="M3 13h18M12 9v12M12 9c-2-4-6-4-6-1.5S12 9 12 9zM12 9c2-4 6-4 6-1.5S12 9 12 9z"/>'),
+  star: I('<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'),
+  shield: I('<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>'),
+  plus: I('<path d="M12 5v14M5 12h14"/>'),
+  chev: I('<path d="M9 6l6 6-6 6"/>'),
+  sparkle: I('<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>'),
+  drop: I('<path d="M12 3c3 4 6 7 6 11a6 6 0 01-12 0c0-4 3-7 6-11z"/>'),
+  cart: I('<path d="M3 4h3l2.5 11h10L21 7H7"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>'),
+  user: I('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>'),
+  building: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="12" height="18"/><path d="M16 9h4v12h-4M8 7h4M8 11h4M8 15h4"/></svg>',
+  help: I('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 .5c0 1.5-2.5 2-2.5 3.5M12 17v.5"/>'),
+  bell: I('<path d="M6 16V11a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/>'),
+  eye: I('<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
+  basket: I('<path d="M4 9h16l-2 11H6z"/><path d="M8 9l2-5M16 9l-2-5M10 13v3M14 13v3"/>'),
+  cutlery: I('<path d="M7 3v8a2 2 0 002 2v8M11 3v8a2 2 0 01-2 2M9 3v6M17 3c-2 2-2 6 0 8v10"/>'),
+  doc: I('<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>'),
+  swap: I('<path d="M4 8h14l-4-4M20 16H6l4 4"/>'),
+  lockcard: I('<rect x="4" y="9" width="16" height="11"/><path d="M8 9V7a4 4 0 018 0v2M10 14h4"/>'),
+  pin: I('<path d="M12 21s7-6.5 7-12a7 7 0 00-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>'),
+  cash: I('<path d="M12 4v16M16 7.5c-1-1.5-6.5-2-6.5 1s6.5 2 6.5 5-5.5 3-6.5 1"/>'),
+  coins: I('<ellipse cx="9" cy="15" rx="6" ry="2.5"/><path d="M3 15v3c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-3"/><circle cx="16" cy="8" r="4"/>'),
+  car: I('<path d="M4 16v-4l2-5h12l2 5v4z"/><circle cx="8" cy="16" r="1.8"/><circle cx="16" cy="16" r="1.8"/>'),
+  bike: I('<circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l4-8h5l3 8M10 8l3 8"/>'),
+  qr: I('<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path d="M14 10l-4 4M10 10h4v4"/>'),
+  card: I('<rect x="3" y="6" width="18" height="12"/><path d="M3 10h18M7 15h4"/>'),
+  xmark: I('<path d="M5 5l5 5M19 5l-5 5M5 19l5-5M19 19l-5-5"/><path d="M10 10h4v4h-4z"/>'),
+  eyeoff: I('<path d="M3 3l18 18M10.6 6.1A9.8 9.8 0 0112 6c5 0 9 6 9 6a17 17 0 01-3.2 3.7M6.5 7.6C4.3 9.1 3 12 3 12s4 6 9 6c1.5 0 2.9-.5 4.1-1.1"/>')
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $app = document.getElementById("app");
+const $layer = document.getElementById("layer");
+const fmt = (n) => "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num = (n) => Math.round(n).toLocaleString("pt-BR");
+const totals = (items) => totalsOf(items);
+const kcal = (v, unit = " kcal") => S.semNumeros ? "" : num(v) + unit;
+const hora = () => "13:02";
+
+function statusbar(light) {
+  // espaço da área segura do aparelho (notch / barra de status real)
+  return `<div class="safetop ${light ? "light" : ""}"></div>`;
+}
+function topbar(title, sub, opts = {}) {
+  return `<div class="topbar">
+    <button class="iconbtn" data-a="${opts.back || "go:home"}" aria-label="Voltar">${IC.back}</button>
+    <h1>${title}${sub ? `<div class="sub">${sub}</div>` : ""}</h1>
+    ${opts.right || `<div class="logo-ph">✕</div>`}
+  </div>`;
+}
+function fnav(active) {
+  const b = (id, label, ic) => `<button class="${active === id ? "on" : ""}" data-a="go:${id}">${ic}<span>${label}</span></button>`;
+  return `<nav class="fnav"><div class="pillnav">
+    ${b("hoje", "Hoje", IC.home)}
+    ${b("historico", "Histórico", IC.hist)}
+    <button class="scanbtn" data-a="go:camera" aria-label="Fotografar prato">${IC.camera}</button>
+    ${b("missoes", "Missões", IC.trophy)}
+    ${b("saude", "Saúde", IC.heart)}
+  </div></nav>`;
+}
+function ring(value, max, size = 132, label = "", sub = "") {
+  const r = (size - 14) / 2, c = 2 * Math.PI * r, pct = Math.min(value / max, 1);
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--c-accent-soft)" stroke-width="12" fill="none"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--c-accent)" stroke-width="12" fill="none" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-pct)}"/></svg>
+    <div class="center"><b>${label}</b><small>${sub}</small></div></div>`;
+}
+function toast(msg, ic = IC.check) {
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `<span style="width:18px;height:18px;display:inline-flex">${ic}</span>${msg}`;
+  document.getElementById("phone").appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
+function confetti() {
+  const c = document.createElement("div"); c.className = "confetti";
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement("i");
+    p.style.left = Math.random() * 100 + "%";
+    p.style.animationDelay = Math.random() * .6 + "s";
+    p.style.background = ["#00EB5E", "#221C46", "#85FD96", "#C7FCCA"][i % 4];
+    c.appendChild(p);
+  }
+  document.getElementById("phone").appendChild(c);
+  setTimeout(() => c.remove(), 2600);
+}
+function openLayer(html, center) {
+  $layer.innerHTML = `<div class="overlay ${center ? "center" : ""}" data-a="closeLayer">${html}</div>`;
+}
+function closeLayer() { $layer.innerHTML = ""; }
+
+/* =========================================================
+   TELAS
+   ========================================================= */
+const SCREENS = {};
+
+/* ---------- 0. Home do app Pluxee (réplica da artboard "Home App - 3C") ---------- */
+const WALLETS = [
+  { t:"Alimentação", v:1300, ic:"basket" }, { t:"Refeição", v:1300, ic:"cutlery" }, { t:"Saúde", v:300, ic:"heart" }
+];
+const NOVIDADES = [
+  { t:"Saque FGTS", glyph:"$" }, { t:"Credito CLT", ic:"coins", sm:true }, { t:"Auto", ic:"car" }, { t:"Bike", ic:"bike" }, { t:"Health Scan", hs:true, a:"go:camera" }
+];
+SCREENS.home = () => `
+<div class="screen">
+  ${statusbar()}
+  <div class="scroll" style="padding-bottom:110px">
+    <div class="hx-head">
+      <div class="row between" style="padding:14px 20px 18px">
+        <div class="row" style="gap:10px"><div class="avatar" style="width:42px;height:42px">${IC.user}</div>
+          <div><div style="font-weight:700;font-size:15px">Olá, ${USER.nome}</div><div style="font-size:12px;opacity:.85;display:flex;align-items:center;gap:4px">${IC.building} Pluxee Benefícios <span style="font-size:10px">▾</span></div></div></div>
+        <div class="row" style="gap:16px"><span class="hx-i">${IC.help}</span><span class="hx-i">${IC.bell}</span></div>
+      </div>
+      <div class="hx-cards">
+        <img class="hx-card" src="assets/card-multibeneficios.png" alt="Cartão Pluxee Multibenefícios">
+        <img class="hx-card peek" src="assets/card-vale-cultura.png" alt="Cartão Pluxee Vale Cultura">
+      </div>
+    </div>
+    <div class="hx-dots"><i class="on"></i><i></i><i></i></div>
+
+    <div class="pad" style="padding:8px 24px 0">
+      <div class="row between" style="margin:10px 0 12px"><b style="font-size:15px">Meus saldos</b><span style="width:22px;height:22px;display:inline-flex">${IC.eye}</span></div>
+    </div>
+    <div class="hx-hscroll">
+      ${WALLETS.map(w => `<div class="hx-wallet"><div class="ico">${IC[w.ic]}</div><div class="muted" style="margin-top:14px">${w.t}</div><b style="font-size:16px">${fmt(w.v)}</b></div>`).join("")}
+    </div>
+
+    <div class="pad" style="padding:16px 24px 0">
+      <div class="grid4 hx-actions">
+        ${[["Extrato","doc"],["Transferir","swap"],["Bloquear","lockcard"],["Onde usar","pin"]].map(([t,ic]) => `<div><span class="hx-act">${IC[ic]}</span><b>${t}</b></div>`).join("")}
+      </div>
+
+      ${hsCard()}
+
+      <img class="hx-bannerimg mt16" src="assets/banner-escolheu-passou-aproveitou.png" alt="Escolheu, passou, aproveitou. Aproveite 7 categorias de benefícios diferentes em um único cartão e acompanhe tudo pelo app.">
+
+      <div class="row between" style="margin:22px 0 12px"><b style="font-size:15px">Perto de você</b><span class="tiny" style="color:var(--c-text-3)">Ver todos</span></div>
+    </div>
+    <div class="hx-hscroll">
+      ${PLACES.map(p => `<div class="hx-place"><div class="ico" style="width:46px;height:46px;margin:0 auto 10px">${IC.cutlery}</div><b>${p.nome}</b><div class="tiny" style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:3px">${IC.pin.replace('<svg','<svg width="12" height="12"')} ${p.dist.replace(" ","")}</div></div>`).join("")}
+    </div>
+
+    <div class="row between" style="margin:24px 24px 16px;height:20px"><b style="font-size:15px">Novidades para você</b><span class="tiny" style="color:var(--c-text-3)">Ver todos</span></div>
+    <div class="hx-novos">
+      ${NOVIDADES.map(n => `<div class="hx-novo" ${n.a ? `data-a="${n.a}" style="cursor:pointer"` : ""}>${n.hs ? `<span class="hs-tile">${hsIcon(74).replace('id="hsg"','id="hsg2"').replace('url(#hsg)','url(#hsg2)')}</span>` : `<span class="hx-tile ${n.sm ? "sm" : ""}">${n.glyph || IC[n.ic]}</span>`}${n.t}</div>`).join("")}
+    </div>
+  </div>
+  <button class="hx-fab" aria-label="Pagar">${IC.qr}</button>
+  <div class="appbar"><svg width="343" height="84" viewBox="0 0 343 84" fill="none" xmlns="http://www.w3.org/2000/svg"><g data-figma-bg-blur-radius="32"><rect x="0.5" y="0.5" width="342" height="83" rx="41.5" fill="#FAF8FF" fill-opacity="0.7"/><rect x="0.5" y="0.5" width="342" height="83" rx="41.5" stroke="#EFEFEF"/><path d="M60.875 23L51.875 29.4754V41H69.875V29.4754L60.875 23ZM60.875 25.4655L67.875 30.502V38.9979H53.875V30.502L60.875 25.4655Z" fill-rule="evenodd" clip-rule="evenodd" fill="#463F5F"/><path d="M43.9173 60V58.404H45.9813V53.196H43.9173V51.6H49.9413V53.196H47.8773V58.404H49.9413V60H43.9173ZM50.9021 60V54H52.6301V54.996H52.7261C52.7261 54.996 53.1941 53.88 54.8861 53.88C56.3021 53.88 57.4061 54.672 57.4061 56.496V60H55.6781V56.976C55.6781 55.932 55.0661 55.416 54.1541 55.416C53.1461 55.416 52.6301 56.076 52.6301 56.976V60H50.9021ZM58.4232 60V54H60.1512V60H58.4232ZM59.2872 53.064C58.6992 53.064 58.3272 52.752 58.3272 52.272C58.3272 51.792 58.6992 51.48 59.2872 51.48C59.8752 51.48 60.2472 51.792 60.2472 52.272C60.2472 52.752 59.8752 53.064 59.2872 53.064ZM64.4134 60.12C62.4334 60.12 60.9934 58.992 60.9934 57C60.9934 55.008 62.4334 53.88 64.4134 53.88C66.7894 53.88 67.7614 55.5 67.7614 56.46H65.9854C65.9854 56.46 65.7574 55.368 64.4134 55.368C63.3574 55.368 62.7694 56.076 62.7694 57C62.7694 57.924 63.3574 58.632 64.4134 58.632C65.7574 58.632 65.9854 57.54 65.9854 57.54H67.7614C67.7614 58.5 66.7894 60.12 64.4134 60.12ZM68.5435 60V54H70.2715V60H68.5435ZM69.4075 53.064C68.8195 53.064 68.4475 52.752 68.4475 52.272C68.4475 51.792 68.8195 51.48 69.4075 51.48C69.9955 51.48 70.3675 51.792 70.3675 52.272C70.3675 52.752 69.9955 53.064 69.4075 53.064ZM74.5337 60.12C72.5537 60.12 71.1137 58.992 71.1137 57C71.1137 55.008 72.5537 53.88 74.5337 53.88C76.5137 53.88 77.9537 55.008 77.9537 57C77.9537 58.992 76.5137 60.12 74.5337 60.12ZM74.5337 58.632C75.5897 58.632 76.1777 57.924 76.1777 57C76.1777 56.076 75.5897 55.368 74.5337 55.368C73.4777 55.368 72.8897 56.076 72.8897 57C72.8897 57.924 73.4777 58.632 74.5337 58.632Z" fill="#463F5F"/><path d="M135.625 33.0017H141.625V35.0017H135.625V33.0017Z" fill="#716E7C"/><path d="M134.625 33.0017H132.625V35.0017H134.625V33.0017Z" fill="#716E7C"/><path d="M124.625 25.0017H144.625V39.0017H124.625V25.0017ZM126.625 30.0017H142.625V27.0017H126.625V30.0017ZM142.625 32.0017H126.625V37.0017H142.625V32.0017Z" fill-rule="evenodd" clip-rule="evenodd" fill="#716E7C"/><path d="M116.375 60.12C113.783 60.12 112.175 58.332 112.175 55.8C112.175 53.268 113.783 51.48 116.375 51.48C119.315 51.48 120.443 53.736 120.443 54.9H119.279C119.279 54.9 118.967 52.512 116.375 52.512C114.443 52.512 113.351 53.94 113.351 55.8C113.351 57.66 114.443 59.088 116.375 59.088C118.967 59.088 119.279 56.7 119.279 56.7H120.443C120.443 57.864 119.315 60.12 116.375 60.12ZM124.094 60.12C122.57 60.12 121.286 59.652 121.286 58.356C121.286 57.084 122.57 56.592 124.01 56.592C125.354 56.592 126.122 57.168 126.122 57.168V56.244C126.122 55.536 125.642 54.96 124.358 54.96C123.158 54.96 122.594 55.332 122.594 55.92H121.562C121.586 54.54 122.858 54 124.358 54C125.942 54 127.13 54.744 127.154 56.244V58.38C127.154 59.016 127.322 59.172 127.658 59.172C127.898 59.172 127.994 59.1 127.994 59.1V60.024C127.994 60.024 127.814 60.12 127.466 60.12C126.446 60.12 126.242 59.4 126.242 59.4H126.194C126.194 59.4 125.618 60.12 124.094 60.12ZM124.25 59.16C125.51 59.16 126.074 58.728 126.122 58.68V58.008C126.074 57.96 125.51 57.552 124.25 57.552C123.302 57.552 122.342 57.696 122.342 58.356C122.342 59.016 123.302 59.16 124.25 59.16ZM128.531 60V54.12H129.563V55.26H129.623C129.623 55.26 130.139 54 131.783 54C132.203 54 132.491 54.084 132.491 54.084V55.212C132.491 55.212 132.155 55.092 131.603 55.092C130.307 55.092 129.563 56.04 129.563 57.204V60H128.531ZM135.882 60.12C134.562 60.12 133.65 59.412 133.65 57.852V55.056H132.666V54.12H133.65V52.8H134.682V54.12H136.866V55.056H134.682V57.72C134.682 58.884 135.258 59.22 136.002 59.22C136.686 59.22 137.046 58.944 137.046 58.944V59.88C137.046 59.88 136.59 60.12 135.882 60.12ZM140.386 60.12C138.538 60.12 137.158 58.932 137.158 57.06C137.158 55.188 138.538 54 140.386 54C142.234 54 143.614 55.188 143.614 57.06C143.614 58.932 142.234 60.12 140.386 60.12ZM140.386 59.16C141.73 59.16 142.558 58.26 142.558 57.06C142.558 55.86 141.73 54.96 140.386 54.96C139.042 54.96 138.214 55.86 138.214 57.06C138.214 58.26 139.042 59.16 140.386 59.16ZM141.442 53.04C140.482 53.04 140.134 52.32 139.57 52.32C139.306 52.32 139.198 52.464 139.198 52.668C139.198 52.824 139.234 52.944 139.234 52.944H138.43C138.43 52.944 138.382 52.752 138.382 52.5C138.382 51.936 138.778 51.612 139.414 51.612C140.374 51.612 140.734 52.332 141.286 52.332C141.562 52.332 141.658 52.188 141.658 51.984C141.658 51.816 141.622 51.708 141.622 51.708H142.426C142.426 51.708 142.474 51.9 142.474 52.152C142.474 52.704 142.102 53.04 141.442 53.04ZM147.627 60.12C145.719 60.12 144.339 58.932 144.339 57.06C144.339 55.188 145.719 54 147.567 54C149.415 54 150.795 55.188 150.795 57.06C150.795 57.348 150.759 57.552 150.759 57.552H145.443C145.443 58.08 146.139 59.16 147.627 59.16C148.947 59.16 149.415 58.38 149.415 58.38H150.627C150.627 58.38 150.051 60.12 147.627 60.12ZM145.431 56.616H149.703C149.703 56.04 149.019 54.96 147.567 54.96C146.115 54.96 145.431 56.04 145.431 56.616ZM154.388 60.12C152.888 60.12 151.52 59.58 151.52 58.08V57.888H152.576V58.08C152.576 58.788 153.188 59.16 154.388 59.16C155.588 59.16 156.2 58.848 156.2 58.26C156.2 56.736 151.652 58.356 151.652 55.776C151.652 54.528 152.864 54 154.364 54C155.864 54 157.076 54.552 157.076 56.04H156.02C156.02 55.332 155.564 54.96 154.364 54.96C153.14 54.96 152.708 55.296 152.708 55.776C152.708 57.228 157.256 55.668 157.256 58.26C157.256 59.64 155.888 60.12 154.388 60.12Z" fill="#716E7C"/><path d="M199.375 23H204.98L208.375 26.3953L211.77 23H217.375V28.6047L213.98 32L217.375 35.3953V41H211.77L208.375 37.6047L204.98 41H199.375V35.3953L202.732 32.0382L199.375 29.0168V23ZM201.375 25V28.1261L205.637 31.9618L201.375 36.2237V39H204.151L208.375 34.7763L212.599 39H215.375V36.2237L211.151 32L215.375 27.7763V25H212.599L208.375 29.2237L204.151 25H201.375Z" fill-rule="evenodd" clip-rule="evenodd" fill="#716E7C"/><path d="M188.023 60.12C186.103 60.12 184.507 59.304 184.507 57.672V57.192H185.635V57.672C185.635 58.764 186.751 59.088 188.023 59.088C189.295 59.088 190.411 58.752 190.411 57.672C190.411 55.44 184.747 57.264 184.747 53.808C184.747 52.356 186.079 51.48 187.999 51.48C189.919 51.48 191.251 52.356 191.251 53.928V54.168H190.123V53.928C190.123 52.908 189.271 52.512 187.999 52.512C186.727 52.512 185.875 52.908 185.875 53.808C185.875 56.028 191.539 54.42 191.539 57.672C191.539 59.316 189.943 60.12 188.023 60.12ZM195.606 60.12C193.698 60.12 192.318 58.932 192.318 57.06C192.318 55.188 193.698 54 195.546 54C197.394 54 198.774 55.188 198.774 57.06C198.774 57.348 198.738 57.552 198.738 57.552H193.422C193.422 58.08 194.118 59.16 195.606 59.16C196.926 59.16 197.394 58.38 197.394 58.38H198.606C198.606 58.38 198.03 60.12 195.606 60.12ZM193.41 56.616H197.682C197.682 56.04 196.998 54.96 195.546 54.96C194.094 54.96 193.41 56.04 193.41 56.616ZM199.739 60V54.12H200.771V55.26H200.831C200.831 55.26 201.347 54 202.991 54C203.411 54 203.699 54.084 203.699 54.084V55.212C203.699 55.212 203.363 55.092 202.811 55.092C201.515 55.092 200.771 56.04 200.771 57.204V60H199.739ZM206.034 60L203.634 54.12H204.714L206.778 59.184H206.826L208.89 54.12H209.97L207.57 60H206.034ZM210.446 60V54.12H211.478V60H210.446ZM210.962 52.632C210.578 52.632 210.326 52.392 210.326 52.056C210.326 51.72 210.578 51.48 210.962 51.48C211.346 51.48 211.598 51.72 211.598 52.056C211.598 52.392 211.346 52.632 210.962 52.632ZM215.79 62.328C215.058 62.328 214.626 62.064 214.626 61.404H215.286C215.286 61.608 215.442 61.752 215.79 61.752C216.138 61.752 216.294 61.62 216.294 61.416C216.294 61.212 216.138 61.08 215.79 61.08H215.142V60.468L215.454 60.096C213.714 60.012 212.442 58.848 212.442 57.048C212.442 55.188 213.822 54 215.67 54C217.938 54 218.79 55.68 218.79 56.4H217.722C217.722 56.4 217.494 54.96 215.67 54.96C214.326 54.96 213.498 55.86 213.498 57.048C213.498 58.248 214.326 59.148 215.67 59.148C217.494 59.148 217.722 57.708 217.722 57.708H218.79C218.79 58.38 218.046 59.868 216.126 60.072L215.79 60.48C216.582 60.48 216.954 60.816 216.954 61.416C216.954 62.016 216.522 62.328 215.79 62.328ZM222.675 60.12C220.827 60.12 219.447 58.932 219.447 57.06C219.447 55.188 220.827 54 222.675 54C224.523 54 225.903 55.188 225.903 57.06C225.903 58.932 224.523 60.12 222.675 60.12ZM222.675 59.16C224.019 59.16 224.847 58.26 224.847 57.06C224.847 55.86 224.019 54.96 222.675 54.96C221.331 54.96 220.503 55.86 220.503 57.06C220.503 58.26 221.331 59.16 222.675 59.16ZM229.496 60.12C227.996 60.12 226.628 59.58 226.628 58.08V57.888H227.684V58.08C227.684 58.788 228.296 59.16 229.496 59.16C230.696 59.16 231.308 58.848 231.308 58.26C231.308 56.736 226.76 58.356 226.76 55.776C226.76 54.528 227.972 54 229.472 54C230.972 54 232.184 54.552 232.184 56.04H231.128C231.128 55.332 230.672 54.96 229.472 54.96C228.248 54.96 227.816 55.296 227.816 55.776C227.816 57.228 232.364 55.668 232.364 58.26C232.364 59.64 230.996 60.12 229.496 60.12Z" fill="#716E7C"/><path d="M291.125 23V30.875L281 41L273.125 33.5L283.25 23H291.125ZM275.961 33.4395L280.966 38.2051L289.125 30.0469V25H284.1L275.961 33.4395Z" fill="#716E7C"/><path d="M252.171 60V51.6H255.303C257.895 51.6 259.503 53.268 259.503 55.8C259.503 58.332 257.895 60 255.303 60H252.171ZM253.299 58.992H255.303C257.199 58.992 258.327 57.648 258.327 55.8C258.327 53.952 257.199 52.608 255.303 52.608H253.299V58.992ZM263.697 60.12C261.789 60.12 260.409 58.932 260.409 57.06C260.409 55.188 261.789 54 263.637 54C265.485 54 266.865 55.188 266.865 57.06C266.865 57.348 266.829 57.552 266.829 57.552H261.513C261.513 58.08 262.209 59.16 263.697 59.16C265.017 59.16 265.485 58.38 265.485 58.38H266.697C266.697 58.38 266.121 60.12 263.697 60.12ZM261.501 56.616H265.773C265.773 56.04 265.089 54.96 263.637 54.96C262.185 54.96 261.501 56.04 261.501 56.616ZM270.458 60.12C268.958 60.12 267.59 59.58 267.59 58.08V57.888H268.646V58.08C268.646 58.788 269.258 59.16 270.458 59.16C271.658 59.16 272.27 58.848 272.27 58.26C272.27 56.736 267.722 58.356 267.722 55.776C267.722 54.528 268.934 54 270.434 54C271.934 54 273.146 54.552 273.146 56.04H272.09C272.09 55.332 271.634 54.96 270.434 54.96C269.21 54.96 268.778 55.296 268.778 55.776C268.778 57.228 273.326 55.668 273.326 58.26C273.326 59.64 271.958 60.12 270.458 60.12ZM277.273 60.108C275.425 60.108 274.045 58.92 274.045 57.048C274.045 55.188 275.425 54 277.273 54C279.541 54 280.393 55.68 280.393 56.4H279.325C279.325 56.4 279.097 54.96 277.273 54.96C275.929 54.96 275.101 55.86 275.101 57.048C275.101 58.248 275.929 59.148 277.273 59.148C279.097 59.148 279.325 57.708 279.325 57.708H280.393C280.393 58.428 279.541 60.108 277.273 60.108ZM284.337 60.12C282.489 60.12 281.109 58.932 281.109 57.06C281.109 55.188 282.489 54 284.337 54C286.185 54 287.565 55.188 287.565 57.06C287.565 58.932 286.185 60.12 284.337 60.12ZM284.337 59.16C285.681 59.16 286.509 58.26 286.509 57.06C286.509 55.86 285.681 54.96 284.337 54.96C282.993 54.96 282.165 55.86 282.165 57.06C282.165 58.26 282.993 59.16 284.337 59.16ZM288.53 60V54.12H289.562V55.02H289.622C289.622 55.02 290.138 54 291.782 54C293.186 54 294.434 54.816 294.434 56.724V60H293.402V56.964C293.402 55.524 292.574 54.96 291.482 54.96C290.21 54.96 289.562 55.8 289.562 56.964V60H288.53ZM298.307 60.12C296.987 60.12 296.075 59.412 296.075 57.852V55.056H295.091V54.12H296.075V52.8H297.107V54.12H299.291V55.056H297.107V57.72C297.107 58.884 297.683 59.22 298.427 59.22C299.111 59.22 299.471 58.944 299.471 58.944V59.88C299.471 59.88 299.015 60.12 298.307 60.12ZM302.811 60.12C300.963 60.12 299.583 58.932 299.583 57.06C299.583 55.188 300.963 54 302.811 54C304.659 54 306.039 55.188 306.039 57.06C306.039 58.932 304.659 60.12 302.811 60.12ZM302.811 59.16C304.155 59.16 304.983 58.26 304.983 57.06C304.983 55.86 304.155 54.96 302.811 54.96C301.467 54.96 300.639 55.86 300.639 57.06C300.639 58.26 301.467 59.16 302.811 59.16ZM309.632 60.12C308.132 60.12 306.764 59.58 306.764 58.08V57.888H307.82V58.08C307.82 58.788 308.432 59.16 309.632 59.16C310.832 59.16 311.444 58.848 311.444 58.26C311.444 56.736 306.896 58.356 306.896 55.776C306.896 54.528 308.108 54 309.608 54C311.108 54 312.32 54.552 312.32 56.04H311.264C311.264 55.332 310.808 54.96 309.608 54.96C308.384 54.96 307.952 55.296 307.952 55.776C307.952 57.228 312.5 55.668 312.5 58.26C312.5 59.64 311.132 60.12 309.632 60.12Z" fill="#716E7C"/></g><defs><clipPath id="appbar_clip" transform="translate(32 32)"><rect x="0.5" y="0.5" width="342" height="83" rx="41.5"/></clipPath></defs></svg></div>
+</div>`;
+
+function homeChipsText() {
+  const st = streak(), next = MISSIONS.find(m => m.grp === "semana" && !S.done[m.id]);
+  return st ? `${st} ${st === 1 ? "dia" : "dias"} seguidos · +20 XP` : (next ? `${next.t} ${Math.min(next.prog(), next.tot)}/${next.tot}` : "+20 XP por almoço");
+}
+function homeChips() {
+  if (!S.meals.length) return `<span class="chip">+50 XP na primeira foto</span><span class="chip">Missão Primeira foto</span>`;
+  const next = MISSIONS.find(m => m.grp === "semana" && !S.done[m.id]);
+  const st = streak();
+  return `${st ? `<span class="chip">${IC.flame.replace('<svg','<svg width="14" height="14"')} ${st} ${st === 1 ? "dia" : "dias"} seguidos</span>` : ""}<span class="chip">+20 XP</span>${next ? `<span class="chip">${next.t} ${Math.min(next.prog(), next.tot)}/${next.tot}</span>` : ""}`;
+}
+
+/* Ícone do Pluxee Health Scan (SVG próprio, inspirado na referência) */
+function hsIcon(size = 64) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true">
+    <defs><linearGradient id="hsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9A3C"/><stop offset="1" stop-color="#F2550A"/></linearGradient></defs>
+    <rect width="64" height="64" rx="16" fill="url(#hsg)"/>
+    <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round">
+      <path d="M9 17V12a3 3 0 0 1 3-3h5M47 9h5a3 3 0 0 1 3 3v5M55 47v5a3 3 0 0 1-3 3h-5M17 55h-5a3 3 0 0 1-3-3v-5"/>
+    </g>
+    <rect x="14" y="19" width="36" height="28" rx="7" fill="#fff"/>
+    <rect x="24" y="15.5" width="16" height="6" rx="3" fill="#fff"/>
+    <circle cx="44.5" cy="24.5" r="2" fill="#F2550A"/>
+    <circle cx="32" cy="33.5" r="10.5" fill="#FFE2CC"/>
+    <circle cx="27.5" cy="30" r="3.4" fill="#3FAE3A"/><circle cx="30.8" cy="28.3" r="3" fill="#53C24A"/>
+    <ellipse cx="36.5" cy="29.5" rx="3.6" ry="2.4" fill="#5BB85A" transform="rotate(-30 36.5 29.5)"/>
+    <path d="M31 33.5c3-2.6 7.6-2.4 9.4.2-2.3 1.7-6.6 1.9-9.4-.2z" fill="#FF7A3D"/>
+    <circle cx="26.5" cy="34" r="2.2" fill="#fff"/><circle cx="29" cy="35" r="2" fill="#fff"/>
+    <path d="M22.5 34.5h19a9.5 6.5 0 0 1-19 0z" fill="#fff" stroke="#F5D9C4" stroke-width="1"/>
+  </svg>`;
+}
+
+/* Card do Health Scan na home: mesmo design antes e depois do primeiro uso */
+function hsCard() {
+  const first = !S.meals.length;
+  const today = mealOfDay(S.day), st = streak(), lv = level();
+  const next = MISSIONS.find(m => m.grp === "semana" && !S.done[m.id]);
+  const recent = S.meals.slice(-4).reverse().map(m => m.photo);
+  const s16 = (ic) => ic.replace('<svg','<svg width="15" height="15"');
+  let headline, stats, foodsText, cta;
+  if (first) {
+    headline = "Descubra as calorias do seu prato com uma foto";
+    stats = `<span>${s16(IC.camera)} 1. Fotografe</span><span>${s16(IC.sparkle)} 2. IA analisa</span><span>${s16(IC.leaf)} 3. Coma bem</span>`;
+    foodsText = "+50 XP na primeira foto";
+    cta = `<button class="hs-cta" data-a="go:camera">${IC.camera}Fotografar meu prato</button>`;
+  } else {
+    headline = today ? `Almoço de hoje registrado${today.local ? " no " + today.local : ""}` : "Hora do almoço? Registre seu prato";
+    const kc = today ? totalsOf(today.items).kcal : 0;
+    stats = `
+      <span class="hs-stat"><small>Almoço hoje</small><b>${today ? (S.semNumeros ? cores(today) + " cores" : num(kc) + " kcal") : "Pendente"}</b></span>
+      <span class="hs-stat"><small>Sequência</small><b>${s16(IC.flame)} ${st} ${st === 1 ? "dia" : "dias"}</b></span>
+      <span class="hs-stat"><small>Nível ${lv.n}</small><b>${S.xp} XP</b></span>`;
+    foodsText = `${S.meals.length} ${S.meals.length === 1 ? "almoço" : "almoços"} · ${S.badges.length} ${S.badges.length === 1 ? "medalha" : "medalhas"}${next ? `<br><span style="opacity:.8;font-weight:600">${next.t} ${Math.min(next.prog(), next.tot)}/${next.tot}</span>` : ""}`;
+    cta = today
+      ? `<button class="hs-cta" data-a="go:hoje">${IC.chart || IC.home}Ver meu dia</button>`
+      : `<button class="hs-cta" data-a="go:camera">${IC.camera}Fotografar meu prato · +20 XP</button>`;
+  }
+  const pics = first ? ["hoje","ter","seg","qui"].map(f => `assets/pratos/${f}.jpg`) : recent;
+  return `
+      <div class="hscard">
+        <div class="hs-top">
+          <div class="hs-icon">${hsIcon(64)}</div>
+          <div class="hs-name">Pluxee <b>Health Scan</b></div>
+        </div>
+        <div class="hs-headline">${headline}</div>
+        <div class="hs-steps">${stats}</div>
+        <div class="hs-foods">
+          ${pics.map(src => `<img src="${src}" alt="">`).join("")}
+          <span>${foodsText}</span>
+        </div>
+        ${cta}
+      </div>`;
+}
+
+/* ---------- 1. Hoje (dashboard pessoal, cresce com o uso) ---------- */
+SCREENS.hoje = () => {
+  const lv = level(), di = dayInfo(S.day), today = mealOfDay(S.day), st = streak();
+  const consumido = today ? totalsOf(today.items).kcal : 0;
+  const ativas = hasWatch() ? kcalAtivas() : 0;
+  const restante = Math.max(USER.metaDia - consumido + ativas, 0);
+  const jornada = MISSIONS.filter(m => m.grp === "jornada");
+  const jornadaDone = jornada.filter(m => S.done[m.id]).length;
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Pluxee Health Scan", "Controle de calorias por foto", { right: `<div style="width:34px;height:34px;border-radius:9px;overflow:hidden">${hsIcon(34).replace('id="hsg"','id="hsg3"').replace('url(#hsg)','url(#hsg3)')}</div>` })}
+  <div class="scroll pad">
+    <div class="row between mb8">
+      <div><div class="h2">Boa tarde, ${USER.nome}</div><div class="muted">${di.long}</div></div>
+      ${st ? `<button class="chip" data-a="go:missoes">${IC.flame.replace('<svg','<svg width="14" height="14"')} ${st} ${st === 1 ? "dia" : "dias"}</button>` : ""}
+    </div>
+
+    ${S.meals.length === 0 ? `
+    <div class="card dark">
+      <div class="ico lg" style="background:var(--c-accent);color:var(--c-header)">${IC.camera}</div>
+      <div class="h2 mt12">Sua jornada começa com uma foto</div>
+      <div style="opacity:.8;font-size:14px">Fotografe seu almoço e veja calorias e nutrientes. Cada registro libera missões, medalhas e dicas feitas pra você.</div>
+      <button class="btn primary mt16" data-a="go:camera">${IC.camera}Fotografar meu primeiro prato · +50 XP</button>
+    </div>` : `
+    <div class="card dark" data-a="go:missoes" style="cursor:pointer">
+      <div class="row between"><div><div class="tiny" style="color:rgba(255,255,255,.65)">Nível ${lv.n}</div><div class="h3">${lv.name}</div></div><div style="text-align:right"><div class="h3">${pts()} pts</div><div class="tiny" style="color:rgba(255,255,255,.65)">acumulados</div></div></div>
+      <div class="bar light mt12"><i style="width:${((S.xp - lv.base) / (lv.next - lv.base)) * 100}%"></i></div>
+      <div class="tiny mt8" style="color:rgba(255,255,255,.65)">${S.xp - lv.base}/${lv.next - lv.base} XP · faltam ${lv.next - S.xp} XP para o Nível ${lv.n + 1}</div>
+    </div>`}
+
+    ${jornadaDone < jornada.length ? `
+    <div class="sec">Primeiros passos <span class="tiny" style="text-transform:none;letter-spacing:0">${jornadaDone} de ${jornada.length}</span></div>
+    <div class="card list" style="padding:4px 16px">
+      ${jornada.map(m => { const ok = S.done[m.id]; return `
+      <button class="row" ${ok ? "" : `data-a="${m.act || "go:camera"}"`} style="width:100%;${ok ? "opacity:.55" : ""}">
+        <span style="width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;${ok ? "background:var(--c-accent);color:var(--c-header)" : "border:2px solid var(--c-line-strong)"}">${ok ? IC.check.replace('<svg','<svg width="14" height="14"') : ""}</span>
+        <span class="grow"><b style="font-size:14px;${ok ? "text-decoration:line-through" : ""}">${m.t}</b><div class="muted">${m.d}</div></span>
+        <span class="chip ${ok ? "" : "solid"}">${ok ? "Feito" : "+" + m.xp + " XP"}</span>
+      </button>`; }).join("")}
+    </div>` : ""}
+
+    <div class="sec">Seu dia</div>
+    ${S.goal ? `
+    <div class="card">
+      ${S.semNumeros ? `
+        <div class="h3 mb8">Seu dia em cores</div>
+        <div class="muted">${today ? `Seu almoço teve <b>${cores(today)} cores</b>. A meta da Semana Colorida é 4 por almoço.` : "Fotografe o almoço para ver as cores do seu prato."}</div>
+      ` : `
+      <div class="row" style="gap:18px">
+        ${ring(consumido, USER.metaDia, 128, num(restante), "kcal restantes")}
+        <div class="grow">
+          <div class="tiny">Meta do dia</div><div class="h3">${num(USER.metaDia)} kcal</div>
+          <div class="divider" style="margin:8px 0"></div>
+          <div class="row between muted"><span>Consumido</span><b>${num(consumido)}</b></div>
+          <div class="row between muted"><span>Ativas (passos)</span><b>${hasWatch() ? "+" + ativas : "—"}</b></div>
+          ${hasWatch() ? "" : `<button class="tiny u mt8" data-a="healthLog">Informar passos de hoje</button>`}
+        </div>
+      </div>`}
+    </div>` : `
+    <div class="card dashed row" data-a="editGoal" style="cursor:pointer">
+      <div class="ico">${IC.target}</div>
+      <div class="grow"><div class="h3">Defina seu objetivo</div><div class="muted">Libera sua meta diária e mostra quanto ainda cabe no seu dia</div></div>
+      <span class="chip solid">+20 XP</span>
+    </div>`}
+
+    <div class="sec">Refeições de hoje</div>
+    ${today ? `
+    <div class="card row" data-a="view:${S.meals.indexOf(today)}" style="cursor:pointer">
+      <img src="${today.photo}" alt="" style="width:56px;height:56px;object-fit:cover;flex-shrink:0;border-radius:8px">
+      <div class="grow"><div class="h3">Almoço${today.local ? " · " + today.local : ""}</div><div class="muted">${today.hora} · ${cores(today)} cores</div></div>
+      <b>${kcal(totalsOf(today.items).kcal, "")}</b>
+    </div>
+    <div class="card soft row">
+      <div class="ico" style="background:var(--c-surface)">${IC.check}</div>
+      <div class="grow"><div class="h3">Almoço de hoje registrado</div><div class="muted">Volte amanhã para manter a sequência.</div></div>
+    </div>
+    <button class="btn secondary sm" style="width:100%;margin-bottom:12px" data-a="nextDay">Protótipo · simular próximo dia</button>` : `
+    <div class="card dashed row" data-a="go:camera" style="cursor:pointer">
+      <div class="ico">${IC.camera}</div>
+      <div class="grow"><div class="h3">Almoço</div><div class="muted">Ainda sem foto. Toque para fotografar</div></div>
+      <span class="chip solid">+20 XP</span>
+    </div>`}
+    <div class="card dashed row" data-a="addManual" style="cursor:pointer">
+      <div class="ico">${IC.plus}</div>
+      <div class="grow"><div class="h3">Jantar</div><div class="muted">Adicionar depois</div></div>
+    </div>
+
+    ${S.meals.length ? `<div class="sec">Missão do dia</div>${dailyMissions().map(missionCard).join("")}` : ""}
+
+    <div class="sec">Feito pra você</div>
+    ${S.meals.length >= 3 ? insightCard() : `
+    <div class="card dashed">
+      <div class="row"><div class="ico">${IC.lock}</div><div class="grow"><div class="h3">Insights do seu almoço</div><div class="muted">Registre 3 almoços para descobrir seus padrões</div></div></div>
+      <div class="row mt12"><div class="bar thin grow"><i style="width:${(S.meals.length / 3) * 100}%"></i></div><span class="tiny">${S.meals.length} / 3</span></div>
+    </div>`}
+    <div class="card row" data-a="lia" style="cursor:pointer">
+      <img class="lia-av" src="assets/lia-mascote.png" alt="LIA, assistente Pluxee">
+      <div class="grow"><div class="h3">Ainda vai pedir? Pergunte à LIA</div><div class="muted">Sugestões do cardápio perto de você${S.goal ? " que cabem na sua meta" : ""}</div></div>
+      <span style="width:18px">${IC.chev}</span>
+    </div>
+    <div style="height:12px"></div>
+  </div>
+  ${fnav("hoje")}
+</div>`;
+};
+
+function dailyMissions() {
+  const list = [{ t:"Registre o almoço de hoje", d:"Uma foto do prato no Pluxee Health Scan", prog: registeredToday() ? 1 : 0, tot:1, xp:20 }];
+  if (hasWatch()) list.push({ t:"Bata 8 mil passos", d:"Informado por você hoje", prog:Math.min(passosHoje(), USER.metaPassos), tot:USER.metaPassos, xp:15, unit:"passos" });
+  return list;
+}
+function insightCard() {
+  const freq = {}; S.meals.forEach(m => { if (m.local) freq[m.local] = (freq[m.local] || 0) + 1; });
+  const top = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
+  const kc = S.meals.map(m => totalsOf(m.items).kcal);
+  const avg = Math.round(kc.reduce((a, b) => a + b, 0) / kc.length);
+  const maxM = S.meals[kc.indexOf(Math.max(...kc))];
+  const colorful = S.meals.filter(m => cores(m) >= 4).length;
+  const txt = S.semNumeros
+    ? `${colorful} dos seus ${S.meals.length} almoços tiveram 4 cores ou mais.${top ? ` Seu lugar favorito é o <b>${top[0]}</b>.` : ""}`
+    : `Seu almoço tem, em média, <b>${num(avg)} kcal</b>${S.goal ? ` (meta ${USER.metaAlmoco})` : ""}. O mais calórico foi na ${WEEKDAYS[dayInfo(maxM.day).wd].toLowerCase()}.${top ? ` Você mais almoça no <b>${top[0]}</b>.` : ""}`;
+  return `<div class="card"><div class="row"><div class="ico">${IC.sparkle}</div><div class="grow"><div class="h3">Seu padrão de almoço</div></div><span class="chip">Novo</span></div><div class="muted mt8">${txt}</div></div>`;
+}
+
+function missionCard(m) {
+  const pct = Math.min(m.prog / m.tot, 1) * 100;
+  const done = m.prog >= m.tot;
+  const progTxt = m.unit ? `${num(Math.min(m.prog, m.tot))} / ${num(m.tot)} ${m.unit}` : `${Math.min(m.prog, m.tot)} / ${m.tot}`;
+  return `<div class="card">
+    <div class="row">
+      <div class="ico">${done ? IC.check : IC.target}</div>
+      <div class="grow"><div class="h3">${m.t}</div><div class="muted">${m.d}</div></div>
+      <span class="chip ${done ? "solid" : ""}">${done ? "Feito" : "+" + m.xp + " XP"}</span>
+    </div>
+    <div class="row mt12"><div class="bar thin grow"><i style="width:${pct}%"></i></div><span class="tiny">${progTxt}</span></div>
+    ${m.badge ? `<div class="tiny mt8">${done ? "Medalha conquistada: " : "Desbloqueia a medalha "}${m.badge}</div>` : ""}
+  </div>`;
+}
+
+/* ---------- 2. Câmera ---------- */
+SCREENS.camera = () => {
+  const modeInfo = {
+    prato: { guide: "Centralize o prato no círculo<br>e fotografe de cima", cta: "Analisar prato" },
+    cardapio: { guide: "Fotografe o cardápio<br>ou a lousa do restaurante", cta: "Ler cardápio" },
+    rotulo: { guide: "Enquadre a tabela nutricional<br>ou o selo frontal da embalagem", cta: "Ler rótulo" }
+  }[S.camMode];
+  return `
+<div class="screen cam">
+  ${statusbar()}
+  <div class="row between" style="padding:4px 12px 8px">
+    <button class="iconbtn" data-a="go:${S.meals.length ? "hoje" : "home"}" aria-label="Fechar">${IC.close}</button>
+    <b style="font-size:15px">${S.camMode === "prato" ? "Fotografar prato" : S.camMode === "cardapio" ? "Ler cardápio" : "Ler rótulo"}</b>
+    <button class="iconbtn" aria-label="Flash">${IC.bolt}</button>
+  </div>
+  <div class="viewfinder">
+    <video id="camvideo" autoplay playsinline muted></video>
+    ${CAM.error ? `
+    <div class="camerr">
+      <div style="width:40px;height:40px;margin:0 auto 10px">${IC.camera}</div>
+      <b>${CAM.error === "insecure" ? "A câmera ao vivo precisa de conexão segura (https)" : CAM.error === "denied" ? "Sem permissão para usar a câmera" : "Câmera ao vivo indisponível aqui"}</b>
+      <div style="font-size:13px;opacity:.8;margin:6px 0 14px">Você ainda pode abrir a câmera do celular ou escolher uma foto.</div>
+      <label class="btn primary" style="cursor:pointer;max-width:260px;margin:0 auto">${IC.camera}Abrir câmera do celular<input type="file" accept="image/*" capture="environment" id="filecap" hidden></label>
+      ${S.camMode === "prato" ? `<button class="btn ghost" data-a="demoShot" style="color:#fff;margin-top:6px">Usar foto de exemplo</button>` : ""}
+    </div>` : ""}
+    <div class="ctx">
+      <div class="chip dark" style="white-space:normal">${IC.map.replace('<svg','<svg width="14" height="14"')} Localização ativa · ${PLACES.length} restaurantes perto de você. Você confirma onde está depois da foto.</div>
+    </div>
+    ${CAM.error ? "" : `<div class="guide">${modeInfo.guide}</div>`}
+    <div class="tips">
+      ${S.camMode === "prato"
+        ? `<span class="chip dark">Boa luz</span><span class="chip dark">Talher como referência</span><span class="chip dark">Sem sombra</span>`
+        : S.camMode === "cardapio" ? `<span class="chip dark">Cardápio inteiro no quadro</span><span class="chip dark">Texto legível</span>`
+        : `<span class="chip dark">Tabela nutricional</span><span class="chip dark">Lupa "ALTO EM"</span>`}
+    </div>
+  </div>
+  <div class="modes">
+    <button class="${S.camMode === "cardapio" ? "on" : ""}" data-a="mode:cardapio">Cardápio</button>
+    <button class="${S.camMode === "prato" ? "on" : ""}" data-a="mode:prato">Prato</button>
+    <button class="${S.camMode === "rotulo" ? "on" : ""}" data-a="mode:rotulo">Rótulo</button>
+  </div>
+  <div class="shutterrow">
+    <label class="side" style="cursor:pointer">${IC.gallery}<span>Galeria</span><input type="file" accept="image/*" id="filepick" hidden></label>
+    <button class="shutter" data-a="shoot" aria-label="${modeInfo.cta}"><i></i></button>
+    <button class="side" data-a="addManual">${IC.edit}<span>Manual</span></button>
+  </div>
+</div>`;
+};
+
+/* ---------- 3. Analisando ---------- */
+SCREENS.analisando = () => {
+  const what = { prato:["Analisando seu prato", ["Identificando cada alimento","Estimando porções (base TACO)","Calculando calorias e nutrientes","Conferindo suas missões"]],
+                 rotulo:["Lendo o rótulo", ["Encontrando a tabela nutricional","Lendo os valores da porção","Verificando selos frontais","Preparando o resumo"]],
+                 cardapio:["Lendo o cardápio", ["Encontrando os pratos","Lendo preços","Estimando calorias","Ordenando pela sua meta"]] }[S.anMode || "prato"];
+  const photo = (S.meal && S.meal.photo) || S.photo;
+  return `
+<div class="screen cam">
+  ${statusbar()}
+  <div class="viewfinder" style="flex:0 0 360px">
+    ${photo ? `<img src="${photo}" alt="">` : `<div class="guide" style="border-style:solid"></div>`}
+    <div class="scanline"></div>
+  </div>
+  <div class="pad" style="flex:1">
+    <div class="h2">${what[0]}, ${USER.nome}…</div>
+    <ul class="steps mt12" id="steps">
+      ${what[1].map((t, i) => `<li class="${i === 0 ? "now" : ""}"><span class="st"></span>${t}</li>`).join("")}
+    </ul>
+    <div class="tiny mt16" id="waitmsg" style="color:rgba(255,255,255,.6)">Estimativa assistida por IA. Você pode ajustar tudo depois.</div>
+    <button class="btn ghost mt16" data-a="cancelAnalyze" style="color:rgba(255,255,255,.75);height:40px">Cancelar</button>
+  </div>
+</div>`;
+};
+
+SCREENS.erroAnalise = () => {
+  const m = S.anMode || "prato";
+  const nome = { prato:"esse prato", rotulo:"esse rótulo", cardapio:"esse cardápio" }[m];
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Não deu pra analisar", "Tente de novo em instantes", { back: "go:camera" })}
+  <div class="scroll pad" style="text-align:center;padding-top:28px">
+    ${S.photo ? `<img src="${S.photo}" alt="" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin:0 auto 16px;display:block">` : ""}
+    <div class="h2">A IA não conseguiu ler ${nome} agora</div>
+    <div class="muted" style="font-size:14px;margin:6px auto 8px;max-width:300px">${S.anError && /não encontrei|não for comida|legível/i.test(S.anError) ? S.anError : "Pode ser instabilidade na conexão ou no serviço de análise. Sua foto continua aqui."}</div>
+    ${S.anError ? `<div class="tiny" style="margin:0 auto 16px;max-width:300px;color:var(--c-line-strong)">Detalhe técnico: ${S.anError}</div>` : ""}
+    <button class="btn primary" data-a="retryAnalyze">Tentar analisar de novo</button>
+    <button class="btn secondary mt8" data-a="go:camera">Tirar outra foto</button>
+    ${m === "prato" ? `<button class="btn ghost mt8" data-a="demoShot">Ver com um exemplo</button>` : ""}
+  </div>
+</div>`;
+};
+
+/* ---------- 4. Resultado ---------- */
+SCREENS.resultado = () => {
+  if (!S.meal) return emptyScreen("Resultado", "Análise do seu prato", "hoje", IC.camera,
+    "Nenhum prato analisado ainda", "Fotografe seu almoço e o resultado aparece aqui: calorias, nutrientes, cores do prato e onde você estava.");
+  const m = S.meal, t = totalsOf(m.items), saved = S.viewing !== null;
+  const pctAlmoco = Math.round((t.kcal / USER.metaAlmoco) * 100);
+  const nc = cores(m);
+  const low = m.items.filter(i => i.conf < 0.6);
+  const macroTot = t.c * 4 + t.p * 4 + t.f * 9;
+  const colorProg = S.meals.filter(x => cores(x) >= 4).length + (!saved && nc >= 4 ? 1 : 0);
+  const firstTime = !saved && S.meals.length === 0;
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar(saved ? "Almoço registrado" : "Seu almoço", `${m.local || (saved ? "Sem local" : "Onde você está?")} · ${m.hora}`, { back: saved ? "go:" + (S.backTo || "historico") : "go:camera" })}
+  <div class="scroll" style="padding-bottom:${saved ? 30 : 100}px">
+    <img src="${m.photo}" alt="Prato analisado" style="width:100%;height:200px;object-fit:cover;display:block">
+    <div class="pad">
+      <div class="card">
+        ${S.semNumeros ? `
+          <div class="h2">Prato com ${nc} cores</div>
+          <div class="muted">Equilíbrio de carboidrato, proteína e vegetais.</div>
+        ` : `
+        <div class="row between">
+          <div><div class="tiny">Total estimado</div><div class="big">${num(t.kcal)} <span style="font-size:16px">kcal</span></div></div>
+          <span class="chip">IA · ajustável</span>
+        </div>
+        ${S.goal ? `
+        <div class="mt12"><div class="row between tiny mb8"><span>${pctAlmoco}% da sua meta de almoço (${USER.metaAlmoco} kcal)</span><span>${pctAlmoco <= 100 ? "Dentro da meta" : "Acima da meta"}</span></div>
+        <div class="bar"><i style="width:${Math.min(pctAlmoco,100)}%"></i></div></div>` : `
+        <button class="card soft row mt12" data-a="editGoal" style="width:100%;margin-bottom:0;padding:10px 12px"><span style="width:18px">${IC.target}</span><span class="grow tiny" style="text-align:left">Defina seu objetivo para comparar com a sua meta de almoço</span><span style="width:16px">${IC.chev}</span></button>`}
+        <div class="divider"></div>
+        <div class="segbar"><i style="width:${(t.c*4/macroTot)*100}%"></i><i style="width:${(t.p*4/macroTot)*100}%"></i><i style="width:${(t.f*9/macroTot)*100}%"></i></div>
+        <div class="legend"><span>Carbo ${num(t.c)}g</span><span>Proteína ${num(t.p)}g</span><span>Gordura ${num(t.f)}g</span></div>
+        `}
+      </div>
+
+      ${saved ? "" : placePicker()}
+
+      <div class="card soft row">
+        <div class="ico" style="background:var(--c-surface)">${IC.leaf}</div>
+        <div class="grow"><div class="h3">${nc} cores no prato</div><div class="muted">${nc >= 4
+          ? (S.done.color ? "Prato colorido. Missão Semana Colorida já conquistada!" : `Conta pra missão Semana Colorida (${Math.min(colorProg,3)}/3).`)
+          : "Com 4 cores ou mais, o almoço conta pra missão Semana Colorida."}</div></div>
+      </div>
+
+      ${low.length ? `<div class="card dashed row"><div style="width:20px">${IC.info}</div><div class="grow muted">Não temos certeza sobre <b>${low.map(i=>i.label).join(", ")}</b>. Confere a porção?</div></div>` : ""}
+
+      <div class="sec">Itens identificados <span class="tiny" style="text-transform:none;letter-spacing:0">toque para ajustar</span></div>
+      <div class="card list" style="padding:4px 16px">
+        ${m.items.map((it, ix) => `
+        <button class="item" data-a="edit:${ix}" style="width:100%">
+          <div class="grow">
+            <div class="row" style="gap:8px"><b style="font-size:14px">${it.label}</b><span class="conf ${it.conf < .6 ? "low" : ""}">${Math.round(it.conf*100)}%</span></div>
+            <div class="muted" style="margin-top:2px">${it.g} g${S.semNumeros ? "" : ` · ${it.kcal} kcal · C ${it.c}g · P ${it.p}g · G ${it.f}g`}</div>
+          </div>
+          <span style="width:18px;color:var(--c-text-2)">${IC.edit}</span>
+        </button>`).join("")}
+        <button class="item" data-a="addItem" style="width:100%"><span style="width:18px">${IC.plus}</span><b style="font-size:14px">Adicionar item que a IA não viu</b></button>
+      </div>
+
+      ${saved ? "" : `
+      <div class="card">
+        <div class="h3 mb8">A análise ficou certa?</div>
+        <div class="grid2"><button class="btn secondary sm" style="width:100%" data-a="fb:1">Sim</button><button class="btn secondary sm" style="width:100%" data-a="fb:0">Corrigir</button></div>
+        <div class="tiny mt8">Cada correção treina a IA pra comida brasileira e vale +5 XP.</div>
+      </div>`}
+    </div>
+  </div>
+  ${saved ? "" : `
+  <div style="position:absolute;left:0;right:0;bottom:0;background:var(--c-surface);border-top:1px solid var(--c-line);padding:12px 16px 26px">
+    <button class="btn primary" data-a="save">${IC.check}Salvar almoço · +${firstTime ? 50 : 20} XP</button>
+  </div>`}
+</div>`;
+};
+
+function placePicker() {
+  const opt = (id, nome, sub) => {
+    const on = S.placeId === id;
+    return `<button class="row" data-a="place:${id}" style="width:100%;padding:12px 0;border-bottom:1px solid var(--c-line)">
+      <span style="width:20px;height:20px;border-radius:50%;border:2px solid var(--c-text);display:flex;align-items:center;justify-content:center;flex-shrink:0">${on ? '<i style="width:10px;height:10px;border-radius:50%;background:var(--c-text);display:block"></i>' : ""}</span>
+      <span class="grow"><b style="font-size:14px">${nome}</b>${sub ? `<div class="muted">${sub}</div>` : ""}</span>
+    </button>`;
+  };
+  return `<div class="card">
+    <div class="row"><div class="ico">${IC.map}</div><div class="grow"><div class="h3">Você está em algum desses?</div><div class="muted">Sugestões pela sua localização agora</div></div></div>
+    <div class="mt8">
+      ${PLACES.map(p => opt(p.id, p.nome, `${p.tipo} · ${p.dist}`)).join("")}
+      ${opt("none", "Nenhum desses", "Salvar sem local")}
+    </div>
+    <div class="tiny mt8">O local fica salvo no seu histórico e ajuda nas sugestões de cardápio.</div>
+  </div>`;
+}
+
+/* ---------- 5. Histórico ---------- */
+SCREENS.historico = () => {
+  if (!S.meals.length) return emptyScreen("Histórico", "Seus almoços aparecem aqui", "historico", IC.hist,
+    "Ainda não tem nenhum registro", "Cada prato que você fotografar entra aqui com foto, local, calorias e cores. Com 3 registros você ganha seus primeiros insights.");
+  const di = dayInfo(S.day), wk = di.week;
+  const days = [0,1,2,3,4].map(wd => { const d = wk * 5 + wd, m = mealOfDay(d); return { d:SHORT[wd], k: m ? totalsOf(m.items).kcal : 0, c: m ? cores(m) : 0, today: d === S.day, future: d > S.day }; });
+  const max = 1100, goalTop = (1 - USER.metaAlmoco / max) * 100;
+  const reg = days.filter(d => d.k);
+  const avg = reg.length ? Math.round(reg.reduce((a, d) => a + d.k, 0) / reg.length) : 0;
+  const first = dayInfo(wk * 5), last = dayInfo(wk * 5 + 4);
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Histórico", `Semana de ${first.short.split(", ")[1]} a ${last.short.split(", ")[1]}`)}
+  <div class="scroll pad">
+    <div class="card">
+      <div class="row between mb8"><div class="h3">${S.semNumeros ? "Cores por almoço" : "Almoços da semana"}</div><span class="chip">Semana ▾</span></div>
+      ${S.semNumeros ? `
+        <div class="bars">${days.map(d=>`<div class="b ${d.today?"today":""} ${!d.c?"empty":""}"><i style="height:${d.c?d.c/6*100:35}%"></i><small>${d.d}</small></div>`).join("")}</div>
+      ` : `
+      <div class="bars">
+        ${S.goal ? `<div class="goal" style="top:${goalTop}%"><span>meta ${USER.metaAlmoco}</span></div>` : ""}
+        ${days.map(d => `<div class="b ${d.today ? "today" : ""} ${!d.k ? "empty" : ""}"><i style="height:${d.k ? (d.k/max)*100 : 35}%;${d.future ? "opacity:.35" : ""}"></i><small>${d.d}</small></div>`).join("")}
+      </div>
+      <div class="grid3 mt16 center">
+        <div><div class="tiny">Média</div><b>${num(avg)} kcal</b></div>
+        <div><div class="tiny">${S.goal ? "Na meta" : "Coloridos"}</div><b>${S.goal ? days.filter(d=>d.k && d.k<=USER.metaAlmoco).length : days.filter(d=>d.c>=4).length} de ${reg.length}</b></div>
+        <div><div class="tiny">Registros</div><b>${S.meals.length} ${S.meals.length === 1 ? "almoço" : "almoços"}</b></div>
+      </div>`}
+    </div>
+
+    ${S.meals.length >= 3 ? insightCard() : `
+    <div class="card dashed row"><div class="ico">${IC.lock}</div><div class="grow muted">Faltam ${3 - S.meals.length} ${3 - S.meals.length === 1 ? "registro" : "registros"} para liberar seus insights de almoço.</div></div>`}
+
+    <div class="sec">Registros</div>
+    ${S.meals.slice().reverse().map(histItem).join("")}
+    <div class="tiny center mt12">Deslize um registro para a esquerda para excluir</div>
+    <div class="tiny center mt8" style="color:var(--c-line-strong)">Fotos ilustrativas: Wikimedia Commons (Tet, Bradleyzm, Fernando Cesar Nox, Vikramdewangan22889, Lucia H Clark · CC0, CC BY, CC BY-SA)</div>
+    <div style="height:12px"></div>
+  </div>
+  ${fnav("historico")}
+</div>`;
+};
+function histItem(m) {
+  const i = S.meals.indexOf(m), di = dayInfo(m.day);
+  return `<div class="card" data-a="view:${i}" style="cursor:pointer">
+    <div class="row">
+      <img src="${m.photo}" alt="" style="width:64px;height:64px;object-fit:cover;flex-shrink:0;border-radius:8px">
+      <div class="grow">
+        <div class="row between"><b style="font-size:14px">${m.day === S.day ? "Hoje" : di.short}</b><b style="font-size:14px">${kcal(totalsOf(m.items).kcal, "")}</b></div>
+        <div class="muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.items.map(x => x.label).join(", ")}</div>
+        <div class="row mt8" style="gap:6px;flex-wrap:wrap"><span class="chip" style="max-width:100%;overflow:hidden;text-overflow:ellipsis">${IC.map.replace('<svg','<svg width="12" height="12"')} ${m.local || "Sem local"}</span><span class="chip">${m.hora} · ${cores(m)} cores</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+function emptyScreen(title, sub, nav, icon, h, p) {
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar(title, sub)}
+  <div class="scroll pad" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 32px 100px">
+    <div class="ico" style="width:96px;height:96px;margin-bottom:20px"><span style="width:40px;height:40px;display:inline-flex">${icon}</span></div>
+    <div class="h2">${h}</div>
+    <div class="muted" style="font-size:14px;max-width:290px">${p}</div>
+    <button class="btn primary mt16" data-a="go:camera" style="max-width:300px">${IC.camera}Fotografar meu prato</button>
+  </div>
+  ${fnav(nav)}
+</div>`;
+}
+
+/* ---------- 6. Missões ---------- */
+SCREENS.missoes = () => {
+  const lv = level(), st = streak(), wk = dayInfo(S.day).week;
+  const jornada = MISSIONS.filter(m => m.grp === "jornada"), semana = MISSIONS.filter(m => m.grp === "semana");
+  const view = (m) => ({ ...m, prog: S.done[m.id] ? m.tot : m.prog() });
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Missões", `Nível ${lv.n} · ${lv.name}`)}
+  <div class="scroll pad">
+    <div class="card dark">
+      <div class="row">
+        <div class="ico lg" style="background:rgba(255,255,255,.15);color:#fff">${IC.star}</div>
+        <div class="grow"><div class="tiny" style="color:rgba(255,255,255,.65)">Nível ${lv.n}</div><div class="h2 nomargin">${lv.name}</div></div>
+        <div style="text-align:right"><div class="h2 nomargin">${pts()}</div><div class="tiny" style="color:rgba(255,255,255,.65)">pontos</div></div>
+      </div>
+      <div class="bar light mt12"><i style="width:${((S.xp - lv.base) / (lv.next - lv.base)) * 100}%"></i></div>
+      <div class="row between tiny mt8" style="color:rgba(255,255,255,.65)"><span>${S.xp - lv.base}/${lv.next - lv.base} XP</span><span>Próximo: Nível ${lv.n + 1} · ${LEVELS[lv.n].name}</span></div>
+    </div>
+
+    <div class="card">
+      <div class="row"><div class="ico">${IC.flame}</div><div><div class="h3">${st ? `${st} ${st === 1 ? "dia seguido" : "dias seguidos"}` : "Sem sequência ainda"}</div><div class="muted">${st ? "Registre amanhã para continuar" : "Registre o almoço hoje para começar"}</div></div></div>
+      <div class="week mt12">
+        ${["S","T","Q","Q","S","S","D"].map((d,i) => { const di = wk * 5 + i, dt = 16 + wk * 7 + i; const done = i < 5 && mealOfDay(di); return `<div class="${done ? "done" : ""} ${i < 5 && di === S.day ? "today" : ""}">${d}<b>${dt > 30 ? dt - 30 : dt}</b></div>`; }).join("")}
+      </div>
+      <div class="tiny mt8">Fins de semana não quebram a sequência.</div>
+    </div>
+
+    ${jornada.some(m => !S.done[m.id]) ? `
+    <div class="sec">Primeiros passos <span class="tiny" style="text-transform:none;letter-spacing:0">${jornada.filter(m => S.done[m.id]).length} de ${jornada.length}</span></div>
+    ${jornada.map(m => missionCard(view(m))).join("")}` : ""}
+
+    <div class="sec">Missões do dia</div>
+    ${dailyMissions().map(missionCard).join("")}
+
+    <div class="sec">Missões da semana</div>
+    ${semana.map(m => missionCard(view(m))).join("")}
+
+    <div class="sec">Desafio entre times · ${USER.empresa}</div>
+    <div class="card">
+      <div class="h3">Novembro Colorido</div>
+      <div class="muted mb8">Cada almoço registrado soma 20 pontos pro seu time.</div>
+      <div class="list">
+        ${teamRank().map(t => `<div class="row" style="${t.me ? "font-weight:700" : ""}"><span style="width:22px">${t.pos}º</span><span class="grow" style="font-size:14px">${t.nome}${t.me ? " (você)" : ""}</span><span style="font-size:14px">${num(t.pts)}</span></div>`).join("")}
+      </div>
+      <div class="tiny mt8">${S.meals.length ? `Você já somou ${S.meals.length * 20} pontos pro seu time.` : "Seu primeiro almoço registrado já soma pontos pro time."} Ranking por time, nunca individual.</div>
+    </div>
+
+    <div class="sec">Medalhas <span class="tiny" style="text-transform:none;letter-spacing:0">${S.badges.length} de ${BADGES.length}</span></div>
+    <div class="card"><div class="badges">
+      ${BADGES.map(b => { const on = S.badges.includes(b.t); return `<div class="badgex ${on ? "" : "locked"}" title="${b.d}"><div class="medal">${on ? IC[b.ic] : IC.lock}</div>${b.t}</div>`; }).join("")}
+    </div></div>
+    <div style="height:12px"></div>
+  </div>
+  ${fnav("missoes")}
+</div>`;
+};
+
+/* ---------- 7. Saúde ---------- */
+SCREENS.saude = () => {
+  const g = S.goal;
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Minha saúde", "Seus dados, só seus")}
+  <div class="scroll pad">
+    <div class="card soft row">
+      <div class="ico" style="background:var(--c-surface)">${IC.lock}</div>
+      <div class="grow muted"><b>Privado.</b> Sua empresa e o RH nunca veem estes dados. Você pode apagar tudo quando quiser.</div>
+    </div>
+
+    <div class="sec">Objetivo</div>
+    ${g ? `
+    <div class="card">
+      <div class="row between"><div><div class="tiny">Meta</div><div class="h2 nomargin">${g.meta.toFixed(0)} kg até ${g.prazo}</div></div><button class="chip" data-a="editGoal">${IC.edit.replace('<svg','<svg width="14" height="14"')} Editar</button></div>
+      <div class="bar mt12"><i style="width:${Math.max(2, Math.min(100, (g.peso - pesoAtual()) / ((g.peso - g.meta) || 1) * 100))}%"></i></div>
+      <div class="row between tiny mt8"><span>Início ${g.peso.toFixed(1).replace(".",",")} kg</span><span>Meta ${g.meta.toFixed(0)} kg</span></div>
+      <div class="divider"></div>
+      <div class="muted">Ritmo saudável: cerca de 0,3 kg por semana. Isso define sua meta diária de <b>${num(USER.metaDia)} kcal</b> e de almoço de <b>${USER.metaAlmoco} kcal</b>.</div>
+    </div>
+    <div class="grid3">
+      <div class="card center" style="padding:12px 6px"><div class="tiny">Peso atual</div><b>${fmt1(pesoAtual())} kg</b><div class="tiny">${hasWeight() ? "atualizado" : "informado"}</div></div>
+      <div class="card center" style="padding:12px 6px"><div class="tiny">Altura</div><b>${g.altura.toFixed(2).replace(".",",")} m</b><div class="tiny">informado</div></div>
+      <div class="card center" style="padding:12px 6px"><div class="tiny">IMC</div><b>${imc().toFixed(1).replace(".",",")}</b><div class="tiny">calculado</div></div>
+    </div>
+    <div class="tiny mb8">O IMC é só uma referência e não considera massa muscular. Converse com um profissional de saúde para orientação individual.</div>` : `
+    <div class="card dashed">
+      <div class="row"><div class="ico">${IC.target}</div><div class="grow"><div class="h3">Você ainda não definiu um objetivo</div><div class="muted">Com peso, altura e meta, a gente calcula sua meta diária de calorias num ritmo saudável.</div></div></div>
+      <button class="btn primary mt12" data-a="editGoal">Definir objetivo · +20 XP</button>
+    </div>`}
+
+    <div class="sec">Registro de hoje</div>
+    <div class="card">
+      <div class="row between mb8"><div class="h3">Passos e peso</div><button class="chip" data-a="healthLog">${IC.edit.replace('<svg','<svg width="14" height="14"')} ${anySource() ? "Atualizar" : "Registrar"}</button></div>
+      ${hasWatch() ? `
+      <div class="grid3">
+        <div class="card center" style="padding:12px 6px;margin:0"><div class="tiny">Passos</div><b>${num(passosHoje())}</b></div>
+        <div class="card center" style="padding:12px 6px;margin:0"><div class="tiny">Kcal ativas</div><b>${kcalAtivas()}</b><div class="tiny">estimadas</div></div>
+        <div class="card center" style="padding:12px 6px;margin:0"><div class="tiny">Meta</div><b>${Math.min(100, Math.round(passosHoje() / USER.metaPassos * 100))}%</b><div class="tiny">de ${num(USER.metaPassos)}</div></div>
+      </div>
+      <div class="bar mt12"><i style="width:${Math.min(100, passosHoje() / USER.metaPassos * 100)}%"></i></div>` : `
+      <div class="muted">Olhe os passos no seu celular ou relógio e informe aqui. Eles viram kcal ativas e somam no seu dia.</div>
+      <button class="btn primary mt12" data-a="healthLog">Informar passos e peso${S.done.conn ? "" : " · +20 XP"}</button>`}
+    </div>
+
+    ${hasWeight() ? `
+    <div class="card">
+      <div class="row between mb8"><div class="h3">Evolução do peso</div><span class="tiny">${S.pesos.length} ${S.pesos.length === 1 ? "registro" : "registros"} · kg</span></div>
+      ${(() => { const w = S.pesos.slice(-6), ks = w.map(x => x.kg), mx = Math.max(...ks) + 0.5, mn = Math.min(...ks) - 1;
+        return `<div class="bars" style="height:90px">${w.map((x, ix) => `<div class="b ${ix === w.length - 1 ? "today" : ""}"><i style="height:${Math.max(8, (x.kg - mn) / ((mx - mn) || 1) * 100)}%"></i><small>${fmt1(x.kg)}</small></div>`).join("")}</div>
+        <div class="row between tiny mt8"><span>${w[0].dt}</span><span>${w[w.length - 1].dt}</span></div>`; })()}
+    </div>` : ""}
+
+    <div class="sec">Apps e dispositivos</div>
+    <div class="card list" style="padding:4px 16px">
+      ${SOURCES.map(s => `<div class="row" style="opacity:.6">
+        <div class="ico">${s.id === "scale" ? IC.scale : IC.watch}</div>
+        <div class="grow"><b style="font-size:14px">${s.t}</b><div class="muted">${s.d}</div></div>
+        <span class="chip">Em breve</span>
+      </div>`).join("")}
+    </div>
+    <div class="tiny mb8">A sincronização automática com apps de saúde chega no app Pluxee. Por enquanto, você informa seus dados aqui.</div>
+
+    <div class="sec">Preferências</div>
+    <div class="card list" style="padding:4px 16px">
+      <div class="row"><div class="grow"><b style="font-size:14px">Modo sem números</b><div class="muted">Esconde calorias e mostra só cores e equilíbrio do prato</div></div><button class="toggle ${S.semNumeros ? "on" : ""}" data-a="toggleNum" aria-label="Modo sem números"></button></div>
+      <div class="row"><div class="grow"><b style="font-size:14px">Lembrete na hora do almoço</b><div class="muted">Aviso entre 11h30 e 14h</div></div><button class="toggle on" aria-label="Lembrete"></button></div>
+      <div class="row"><div class="grow"><b style="font-size:14px">Participar do desafio do time</b><div class="muted">Só soma pontos, nunca mostra seu prato</div></div><button class="toggle on" aria-label="Desafio"></button></div>
+    </div>
+    <button class="btn ghost danger mt8" data-a="reset">Apagar meus dados e recomeçar</button>
+    <div style="height:12px"></div>
+  </div>
+  ${fnav("saude")}
+</div>`;
+};
+
+/* ---------- 8. Cardápio (antes de pedir) ---------- */
+SCREENS.cardapio = () => {
+  const d = S.menu || { pratos:[] };
+  const meta = USER.metaAlmoco;
+  const pratos = (d.pratos || []).filter(p => p && p.nome).map(p => ({ ...p, kcal: +p.kcal || 0, cores: +p.cores || 0 }));
+  const score = (p) => (S.goal ? Math.abs(meta - 50 - p.kcal) : p.kcal) - p.cores * 40;
+  const ranked = pratos.slice().sort((a, b) => score(a) - score(b));
+  const tag = (p, i) => i === 0 ? "Melhor pra você" : (S.goal && p.kcal > meta ? "Acima da meta do almoço" : p.cores >= 4 ? "Conta pra Semana Colorida" : p.kcal && p.kcal < 500 ? "Mais leve" : "");
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Cardápio lido", d.restaurante || "Restaurante perto de você", { back: "go:camera" })}
+  <div class="scroll pad">
+    ${S.photo ? `<img src="${S.photo}" alt="Foto do cardápio" style="width:100%;height:140px;object-fit:cover;border-radius:12px;display:block;margin-bottom:12px">` : ""}
+    <div class="card soft">
+      <div class="h3">${S.goal ? `${USER.nome}, cabem ${S.semNumeros ? "pratos leves" : "até " + meta + " kcal"} no seu almoço` : `${ranked.length} pratos encontrados`}</div>
+      <div class="muted mt8">${S.goal ? "Ordenamos os pratos pela sua meta e pela variedade de cores." : "Defina seu objetivo na aba Saúde para ordenar pela sua meta."}</div>
+    </div>
+    ${ranked.length ? ranked.map((p, i) => `<div class="card row">
+      <div class="ico">${IC.cutlery}</div>
+      <div class="grow">
+        ${tag(p, i) ? `<span class="pill-tag">${tag(p, i)}</span>` : ""}
+        <div class="h3" style="margin-top:6px">${p.nome}</div>
+        <div class="muted">${S.semNumeros || !p.kcal ? "" : "~" + num(p.kcal) + " kcal · "}${p.cores ? p.cores + " cores" : ""}${p.preco ? " · " + fmt(+p.preco) : ""}</div>
+      </div>
+      ${i === 0 ? `<span class="chip solid">1º</span>` : ""}
+    </div>`).join("") : `<div class="card dashed muted">Não consegui ler pratos nessa foto. Tente enquadrar o cardápio inteiro, com boa luz.</div>`}
+    <div class="tiny center">Leitura por IA. Calorias são estimativas de uma porção típica.</div>
+    <button class="btn primary mt16" data-a="camPrato">${IC.camera}Já pedi, fotografar o prato</button>
+  </div>
+</div>`;
+};
+
+/* ---------- 9. Rótulo (dados lidos da foto) ---------- */
+SCREENS.rotulo = () => {
+  const d = S.label || {}, n = d.nutrientes || {};
+  const v = (x, u, dec = 0) => (x === null || x === undefined || x === "" || isNaN(+x)) ? "—" : (+x).toLocaleString("pt-BR", { maximumFractionDigits: dec || 1 }) + (u ? " " + u : "");
+  const rows = [
+    ["Energia", v(n.energia_kcal, "kcal")], ["Carboidratos", v(n.carboidratos_g, "g")], ["Açúcares totais", v(n.acucares_totais_g, "g")],
+    ["Açúcares adicionados", v(n.acucares_adicionados_g, "g")], ["Proteínas", v(n.proteinas_g, "g")], ["Gorduras totais", v(n.gorduras_totais_g, "g")],
+    ["Gorduras saturadas", v(n.gorduras_saturadas_g, "g")], ["Fibras", v(n.fibras_g, "g")], ["Sódio", v(n.sodio_mg, "mg")]
+  ].filter(r => r[1] !== "—");
+  const selos = (d.selos_frontais || []).filter(Boolean);
+  return `
+<div class="screen">
+  ${statusbar()}
+  ${topbar("Leitura de rótulo", [d.produto, d.porcao].filter(Boolean).join(" · ") || "Produto lido pela câmera", { back: "go:camera" })}
+  <div class="scroll pad">
+    ${S.photo ? `<img src="${S.photo}" alt="Foto do rótulo" style="width:100%;height:170px;object-fit:cover;border-radius:12px;display:block;margin-bottom:12px">` : ""}
+    ${d.legivel === false ? `<div class="card dashed muted">Não deu pra ler a tabela com nitidez. Os valores abaixo podem estar incompletos. Tente uma foto mais próxima e sem reflexo.</div>` : ""}
+    <div class="card">
+      <div class="h3 mb8">Selo frontal</div>
+      <div class="row" style="gap:6px;flex-wrap:wrap">${selos.length ? selos.map(x => `<span class="chip solid">${x}</span>`).join("") : `<span class="chip">Sem selo "ALTO EM" na embalagem</span>`}</div>
+      <div class="divider"></div>
+      <div class="h3 mb8">Tabela nutricional${d.porcao ? ` <span class="tiny" style="font-weight:600">por ${d.porcao}</span>` : ""}</div>
+      ${rows.length ? `<div class="list">${rows.map(r => `<div class="row between" style="padding:8px 0"><span class="muted" style="font-size:14px">${r[0]}</span><b>${S.semNumeros && r[0] === "Energia" ? "—" : r[1]}</b></div>`).join("")}</div>` : `<div class="muted">Nenhum valor legível.</div>`}
+    </div>
+    ${d.resumo ? `<div class="card soft"><div class="h3">O que isso significa pra você</div><div class="muted mt8">${d.resumo}</div></div>` : ""}
+    ${(d.ingredientes_destaque || []).length ? `<div class="card"><div class="h3 mb8">Ingredientes em destaque</div><div class="row" style="gap:6px;flex-wrap:wrap">${d.ingredientes_destaque.map(x => `<span class="chip">${x}</span>`).join("")}</div></div>` : ""}
+    <div class="grid2">
+      <button class="btn secondary" data-a="go:hoje">Não vou consumir</button>
+      <button class="btn primary" data-a="saveSnack">Registrar lanche</button>
+    </div>
+    <div class="tiny center mt12">+10 XP · conta pra medalha Leitor de rótulos</div>
+  </div>
+</div>`;
+};
+
+/* =========================================================
+   CAMADAS (sheets e diálogos)
+   ========================================================= */
+function editSheet(id) {
+  const it = S.meal.items[+id];
+  const base = { ...it };
+  const presets = [["Pequena", .5], ["Média", 1], ["Grande", 1.5], ["Extra", 2]];
+  openLayer(`<div class="sheet" data-stop>
+    <div class="grab"></div>
+    <div class="row between"><div class="h2 nomargin">${it.label}</div><button class="iconbtn" data-a="closeLayer">${IC.close}</button></div>
+    <div class="muted mb8">Confiança da IA: ${Math.round(it.conf*100)}%</div>
+    <div class="tiny mb8 mt12">Porção</div>
+    <div class="presets">${presets.map(([l, r]) => `<button data-p="${Math.round(base.g*r)}" class="${r===1?"on":""}">${l}</button>`).join("")}</div>
+    <div class="tiny mt16">Ajuste fino: <b id="gval">${it.g} g</b></div>
+    <input type="range" min="10" max="400" step="5" value="${it.g}" id="grange">
+    <div class="card soft mt12 grid2" id="calc"></div>
+    <div class="tiny mb8">Não é esse alimento?</div>
+    <input class="field mb8" placeholder="Buscar outro alimento (base TACO)">
+    <button class="btn primary mt8" id="saveEdit">Salvar ajuste · +5 XP</button>
+  </div>`);
+  const range = document.getElementById("grange");
+  const calc = () => {
+    const g = +range.value, r = g / base.g;
+    document.getElementById("gval").textContent = g + " g";
+    document.getElementById("calc").innerHTML = S.semNumeros
+      ? `<div class="muted">${g} g de ${it.label}</div>`
+      : `<div><div class="tiny">Calorias</div><b>${Math.round(base.kcal*r)} kcal</b></div><div><div class="tiny">Carbo</div><b>${Math.round(base.c*r)} g</b></div><div><div class="tiny">Proteína</div><b>${Math.round(base.p*r)} g</b></div><div><div class="tiny">Gordura</div><b>${(base.f*r).toFixed(1)} g</b></div>`;
+    document.querySelectorAll(".presets button").forEach(b => b.classList.toggle("on", +b.dataset.p === g));
+  };
+  range.oninput = calc;
+  document.querySelectorAll(".presets button").forEach(b => b.onclick = () => { range.value = b.dataset.p; calc(); });
+  document.getElementById("saveEdit").onclick = () => {
+    const g = +range.value, r = g / base.g;
+    Object.assign(it, { g, kcal:Math.round(base.kcal*r), c:Math.round(base.c*r), p:Math.round(base.p*r), f:+(base.f*r).toFixed(1), conf: Math.max(it.conf, .9) });
+    S.xp += 5; closeLayer(); render(); toast("Porção ajustada · +5 XP");
+  };
+  calc();
+}
+
+function lia() {
+  openLayer(`<div class="sheet" data-stop style="height:80%;display:flex;flex-direction:column">
+    <div class="grab"></div>
+    <div class="row between mb8"><div class="row"><img src="assets/lia-mascote.png" alt="" style="width:48px;height:48px;object-fit:contain"><div><div class="h3">LIA</div><div class="tiny">Assistente Pluxee</div></div></div><button class="iconbtn" data-a="closeLayer">${IC.close}</button></div>
+    <div class="grow" style="overflow:auto;padding-top:8px" id="chat">
+      <div class="botrow"><img src="assets/lia-mascote.png" alt=""><div class="msg bot">Oi, ${USER.nome}! Tem ${PLACES.length} restaurantes da rede perto de você. Quer que eu sugira o que pedir?</div></div>
+    </div>
+    <div class="row" style="gap:6px;flex-wrap:wrap;margin:8px 0" id="sugg">
+      <button class="chip" data-q="O que pedir aqui perto?">O que pedir aqui perto?</button>
+      <button class="chip" data-q="Monta uma lista de compras pro jantar">Lista de compras pro jantar</button>
+    </div>
+    <div class="row"><input class="field grow" placeholder="Pergunte à LIA"><button class="btn primary sm">${IC.chev}</button></div>
+  </div>`);
+  const answers = {
+    "O que pedir aqui perto?": `No Restaurante Bom Prato, a 40 m de você, o <b>frango grelhado com legumes</b> (${S.semNumeros ? "5 cores" : "~560 kcal"}, R$ 29,90) é o que mais combina com a sua meta. E ainda fecha a missão Semana Colorida. Quer que eu deixe a câmera pronta pra quando o prato chegar?`,
+    "Monta uma lista de compras pro jantar": `Fechado. Pra fechar seu dia: <b>omelete com espinafre e tomate</b>. Lista: ovos, espinafre, tomate, queijo branco. Dá uns R$ 28 no mercado e você paga com o saldo Alimentação (${fmt(USER.saldoAlimentacao)}).`
+  };
+  document.querySelectorAll("#sugg button").forEach(b => b.onclick = () => {
+    const chat = document.getElementById("chat");
+    chat.innerHTML += `<div class="msg me">${b.dataset.q}</div><div class="botrow" id="typing"><img src="assets/lia-mascote.png" alt=""><div class="msg bot"><span class="typing"><i></i><i></i><i></i></span></div></div>`;
+    chat.scrollTop = chat.scrollHeight;
+    setTimeout(() => { document.getElementById("typing").outerHTML = `<div class="botrow"><img src="assets/lia-mascote.png" alt=""><div class="msg bot">${answers[b.dataset.q]}</div></div>`; chat.scrollTop = chat.scrollHeight; }, 1100);
+    b.remove();
+    if (!S.liaAsked) { S.liaAsked = true; const gained = checkMissions(); persist(); setTimeout(() => celebrateQuick(gained), 1300); }
+  });
+}
+
+function celebrate(gained, lvBefore) {
+  confetti();
+  const lv = level(), st = streak();
+  const rows = [{ xp:20, t:"Almoço registrado" }, ...gained.map(m => ({ xp:m.xp, t:"Missão " + m.t }))];
+  const badges = gained.filter(m => m.badge);
+  openLayer(`<div class="dialog" data-stop style="max-height:92%;overflow:auto">
+    <div class="ico lg" style="margin:0 auto 12px;border-radius:50%">${IC.trophy}</div>
+    <div class="h2">${S.meals.length === 1 ? "Primeiro almoço registrado!" : "Almoço registrado, " + USER.nome + "!"}</div>
+    <div class="muted">${st > 1 ? `Sequência de <b>${st} dias</b> seguidos` : "Sua sequência começou hoje"}</div>
+    <div class="card soft mt16" style="text-align:left;padding:8px 14px">
+      ${rows.map(r => `<div class="row between" style="padding:6px 0"><span style="font-size:14px">${r.t}</span><b>+${r.xp} XP</b></div>`).join("")}
+      <div class="row between" style="padding:6px 0;border-top:1px solid var(--c-line)"><span style="font-size:14px">Pontos pro seu time</span><b>+20</b></div>
+    </div>
+    ${badges.map(m => { const b = BADGES.find(x => x.t === m.badge); return `
+    <div class="card mt8 row" style="text-align:left;margin-bottom:0">
+      <div class="badgex"><div class="medal" style="width:48px;height:48px;margin:0">${IC[b.ic]}</div></div>
+      <div class="grow"><div class="h3">Medalha desbloqueada</div><div class="muted">${b.t} · ${b.d}</div></div>
+    </div>`; }).join("")}
+    ${lv.n > lvBefore ? `<div class="card dark mt8" style="margin-bottom:0"><div class="h3">Subiu de nível!</div><div class="tiny" style="color:rgba(255,255,255,.75)">Nível ${lv.n} · ${lv.name}</div></div>` : ""}
+    <div class="bar mt16"><i style="width:${((S.xp - lv.base) / (lv.next - lv.base)) * 100}%"></i></div>
+    <div class="tiny mt8">Nível ${lv.n} · ${S.xp - lv.base}/${lv.next - lv.base} XP</div>
+    <button class="btn primary mt16" data-a="closeGo:hoje">Ver meu dia</button>
+    <button class="btn ghost" data-a="closeGo:missoes">Ver missões</button>
+  </div>`, true);
+}
+
+function healthSheet() {
+  const p = passosHoje(), w = pesoAtual();
+  openLayer(`<div class="sheet" data-stop><div class="grab"></div>
+    <div class="h2">Registro de hoje</div>
+    <div class="muted mb8">Veja os passos no app de saúde do seu celular ou relógio e informe aqui.</div>
+    <div class="grid2 mt12">
+      <div><div class="tiny">Passos de hoje</div><input class="field mt8" id="hPassos" inputmode="numeric" placeholder="ex.: 6500" value="${p || ""}"></div>
+      <div><div class="tiny">Peso (kg)</div><input class="field mt8" id="hPeso" inputmode="decimal" placeholder="opcional" value=""></div>
+    </div>
+    <div class="tiny mt8">${w ? `Último peso: ${fmt1(w)} kg. Deixe em branco se não se pesou hoje.` : "Deixe o peso em branco se não se pesou hoje."}</div>
+    <div class="card soft row mt12"><div style="width:20px">${IC.lock}</div><div class="grow tiny">Dados de saúde são sensíveis pela LGPD. Ficam só neste aparelho, nunca são compartilhados com sua empresa e você pode apagar tudo quando quiser.</div></div>
+    <button class="btn primary" id="saveHealth">Salvar</button>
+    <button class="btn ghost" data-a="closeLayer">Agora não</button>
+  </div>`);
+  document.getElementById("saveHealth").onclick = () => {
+    const ps = parseInt(document.getElementById("hPassos").value.replace(/\D/g, ""), 10);
+    const kg = parseFloat(document.getElementById("hPeso").value.replace(",", "."));
+    let changed = false;
+    if (isFinite(ps) && ps >= 0 && ps < 100000) { S.passos = { ...(S.passos || {}), [S.day]: ps }; changed = true; }
+    if (isFinite(kg) && kg >= 25 && kg <= 300) {
+      const dt = dayInfo(S.day).short.split(", ")[1];
+      S.pesos = (S.pesos || []).filter(x => x.day !== S.day).concat({ day:S.day, kg:Math.round(kg * 10) / 10, dt });
+      changed = true;
+    } else if (document.getElementById("hPeso").value.trim()) { toast("Confira o peso informado"); return; }
+    closeLayer();
+    if (!changed) return;
+    const gained = checkMissions(); render(); celebrateQuick(gained);
+    if (!gained.length) toast(passosHoje() >= USER.metaPassos ? "Meta de passos batida!" : "Registro salvo");
+  };
+}
+
+function goalSheet() {
+  const g = S.goal || { peso:84.2, altura:1.78, meta:80, prazo:"março/27" };
+  const v = (n, d) => n.toFixed(d).replace(".", ",");
+  openLayer(`<div class="sheet" data-stop><div class="grab"></div>
+    <div class="h2">Seu objetivo</div>
+    <div class="muted mb8">A gente calcula uma meta diária num ritmo saudável.</div>
+    <div class="grid3 mb8">${["Perder peso","Manter","Ganhar massa"].map((o,ix)=>`<button class="btn ${ix===0?"primary":"secondary"} sm" style="width:100%;font-size:12px">${o}</button>`).join("")}</div>
+    <div class="grid2 mt12">
+      <div><div class="tiny">Peso atual (kg)</div><input class="field mt8" id="gPeso" inputmode="decimal" value="${v(g.peso,1)}"></div>
+      <div><div class="tiny">Altura (m)</div><input class="field mt8" id="gAlt" inputmode="decimal" value="${v(g.altura,2)}"></div>
+      <div><div class="tiny">Peso meta (kg)</div><input class="field mt8" id="gMeta" inputmode="decimal" value="${v(g.meta,1)}"></div>
+      <div><div class="tiny">Prazo</div><input class="field mt8" id="gPrazo" value="${g.prazo}"></div>
+    </div>
+    <div class="card soft mt12 tiny">Ritmo de 0,3 kg por semana. Metas mais agressivas que 1 kg por semana não são sugeridas aqui. Para um plano individual, fale com um nutricionista (disponível em Serviços).</div>
+    <button class="btn primary" id="saveGoal">Salvar objetivo</button>
+  </div>`);
+  document.getElementById("saveGoal").onclick = () => {
+    const n = (id, def) => { const x = parseFloat(document.getElementById(id).value.replace(",", ".")); return isFinite(x) && x > 0 ? x : def; };
+    S.goal = { peso:n("gPeso", g.peso), altura:n("gAlt", g.altura), meta:n("gMeta", g.meta), prazo:document.getElementById("gPrazo").value || g.prazo };
+    closeLayer(); const gained = checkMissions(); render(); celebrateQuick(gained);
+    if (!gained.length) toast("Objetivo atualizado");
+  };
+}
+
+/* =========================================================
+   CÂMERA AO VIVO (getUserMedia) com fallback para a câmera nativa
+   ========================================================= */
+const CAM = { stream:null, error:null };
+async function startCamera() {
+  const v = document.getElementById("camvideo");
+  if (!v) return;
+  if (CAM.stream) { v.srcObject = CAM.stream; return; }
+  if (!window.isSecureContext) { CAM.error = "insecure"; render(); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { CAM.error = "unsupported"; render(); return; }
+  try {
+    CAM.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 1280 } }, audio: false });
+    if (S.screen !== "camera") { stopCamera(); return; }
+    CAM.error = null;
+    const v2 = document.getElementById("camvideo"); if (v2) v2.srcObject = CAM.stream;
+  } catch (e) {
+    CAM.error = (e && (e.name === "NotAllowedError" || e.name === "SecurityError")) ? "denied" : "unsupported";
+    render();
+  }
+}
+function stopCamera() {
+  if (CAM.stream) { CAM.stream.getTracks().forEach(t => t.stop()); CAM.stream = null; }
+}
+function shrinkToDataURL(source, w, h, max = 640) {
+  const k = Math.min(1, max / Math.max(w, h));
+  const c = document.createElement("canvas"); c.width = Math.round(w * k); c.height = Math.round(h * k);
+  c.getContext("2d").drawImage(source, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", 0.75);
+}
+function captureFrame() {
+  const v = document.getElementById("camvideo");
+  if (!CAM.stream || !v || !v.videoWidth) return null;
+  const f = document.createElement("div"); f.className = "flash"; document.getElementById("phone").appendChild(f); setTimeout(() => f.remove(), 400);
+  return shrinkToDataURL(v, v.videoWidth, v.videoHeight);
+}
+
+/* =========================================================
+   ANÁLISE POR IA
+   Usa a função analyze-food do projeto Lovable (Gemini 2.5 Flash + base TACO).
+   Primeiro tenta o backend próprio (api/analyze.php); se não estiver configurado, usa o Lovable.
+   ========================================================= */
+const API_URL = "api/analyze.php"; // backend próprio na Hostinger (PHP)
+const LOVABLE_URL = "https://ngubhqtfptphoxqnutuy.supabase.co/functions/v1/analyze-food"; // reserva, só para prato
+const COLOR_RULES = [
+  ["verde", /alface|r[uú]cula|couve|br[oó]colis|salada|espinafre|agri[aã]o|vagem|ervilha|abobrinha|pepino|chuchu|piment[aã]o verde|folha|ervas|salsa|cebolinha|abacate|kiwi|lim[aã]o/i],
+  ["vermelho", /tomate|beterraba|morango|pimenta|lingui[cç]a|calabresa|melancia|piment[aã]o vermelho|ketchup|molho de tomate/i],
+  ["laranja", /cenoura|ab[oó]bora|laranja|mam[aã]o|manga|batata doce|salm[aã]o|moranga/i],
+  ["amarelo", /batata frita|fritas|farofa|milho|ovo|omelete|polenta|mandioca|aipim|banana|abacaxi|queijo|maionese|mostarda/i],
+  ["preto", /feij[aã]o preto|feijoada|azeitona|shoyu/i],
+  ["marrom", /feij[aã]o|carne|bife|frango assado|picanha|alcatra|cupim|fil[eé]|cogumelo|gr[aã]o|lentilha|caf[eé]|chocolate|integral|cebola refogada|cebola/i],
+  ["branco", /arroz|pur[eê]|macarr[aã]o|massa|peixe|til[aá]pia|p[aã]o|tapioca|couve-flor|frango|peito|queijo branco|iogurte|batata/i]
+];
+const guessColor = (label) => { for (const [cor, re] of COLOR_RULES) if (re.test(label)) return cor; return "outro"; };
+async function postJSON(url, body, ms = 50000) {
+  const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), ms);
+  try {
+    const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body), signal: ctrl.signal });
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok, status: res.status, data };
+  } catch (e) { return { ok:false, status:0, data:{ error: e.name === "AbortError" ? "tempo esgotado" : "sem conexão" } }; }
+  finally { clearTimeout(to); }
+}
+function mapItems(items) {
+  return items.map(it => ({
+    label: it.label || "Alimento", conf: Math.max(0, Math.min(1, +it.confidence || .5)),
+    g: Math.round(+it.portionGrams || 0), kcal: Math.round(+it.kcal || 0),
+    c: Math.round((it.macros && +it.macros.carbs) || 0), p: Math.round((it.macros && +it.macros.protein) || 0),
+    f: Math.round(((it.macros && +it.macros.fat) || 0) * 10) / 10, cor: guessColor(it.label || "")
+  }));
+}
+/* mode: prato | rotulo | cardapio */
+async function analyzeReal(photo, mode = "prato") {
+  let last = "", backendMissing = false;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const r = await postJSON(API_URL, { mode, imageBase64: photo }, 70000);
+    if (r.ok) {
+      if (mode === "prato") { if (Array.isArray(r.data.items) && r.data.items.length) return mapItems(r.data.items); }
+      else return r.data;
+    }
+    last = r.data.error || ("HTTP " + r.status);
+    backendMissing = r.status === 404 || /não configurado|ausente/i.test(last);
+    if (backendMissing || [400, 403, 413, 422].includes(r.status)) break;
+    if (r.status === 0) break; // sem conexão ou tempo esgotado
+  }
+  // reserva (só prato): função do Lovable, usada apenas se o backend próprio não estiver configurado
+  if (mode === "prato" && backendMissing) {
+    const r = await postJSON(LOVABLE_URL, { imageBase64: photo }, 30000);
+    if (r.ok && Array.isArray(r.data.items) && r.data.items.length) return mapItems(r.data.items);
+  }
+  throw new Error(last || "falha na análise");
+}
+const nowHora = () => { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+
+/* =========================================================
+   AÇÕES
+   ========================================================= */
+function shoot() {
+  const frame = captureFrame();
+  if (frame) { S.photo = frame; analyzePhoto(); return; }
+  const cap = document.getElementById("filecap");
+  if (cap) cap.click(); else toast("Abra pelo celular para usar a câmera", IC.info);
+}
+
+function analyzePhoto(useDemo) {
+  stopCamera();
+  const mode = useDemo ? "prato" : S.camMode;
+  S.anMode = mode; S.anError = null;
+  const demo = DEMOS[S.demoIdx % DEMOS.length];
+  if (mode === "prato") S.meal = { day:S.day, hora: useDemo ? demo.hora : nowHora(), local:null, photo: useDemo ? demo.photo : S.photo, items:[], demo: !!useDemo };
+  else S.meal = null;
+  S.viewing = null; S.placeId = null;
+  S.screen = "analisando"; render();
+  const steps = (i) => { const l = document.querySelectorAll("#steps li"); if (!l.length) return; l.forEach((li, k) => li.className = k < i ? "done" : k === i ? "now" : ""); };
+  let i = 0; const timer = setInterval(() => { if (i < 3) steps(++i); }, 1200);
+  const slow = setTimeout(() => { const w = document.getElementById("waitmsg"); if (w) w.textContent = "A IA está mais lenta agora. Estamos tentando de novo automaticamente…"; }, 9000);
+  const minWait = new Promise(r => setTimeout(r, 2200));
+  const job = useDemo ? Promise.resolve(JSON.parse(JSON.stringify(demo.items))) : analyzeReal(S.photo, mode);
+  Promise.all([job, minWait]).then(([result]) => {
+    clearInterval(timer); clearTimeout(slow); steps(4);
+    if (S.screen !== "analisando") return;
+    if (mode === "prato") { S.meal.items = result; S.screen = "resultado"; }
+    else if (mode === "rotulo") { S.label = result; S.rotulo = true; S.screen = "rotulo"; }
+    else { S.menu = result; S.screen = "cardapio"; }
+    render();
+    if (mode === "rotulo") celebrateQuick(checkMissions());
+    if (useDemo) toast("Foto de exemplo · análise simulada", IC.info);
+  }).catch((err) => {
+    clearInterval(timer); clearTimeout(slow);
+    if (S.screen !== "analisando") return;
+    S.anError = err.message; console.warn("análise:", err);
+    S.screen = "erroAnalise"; render();
+  });
+}
+
+const ACTIONS = {
+  go: (s) => { S.screen = s; render(); },
+  camRotulo: () => { S.camMode = "rotulo"; S.screen = "camera"; render(); },
+  place: (id) => {
+    S.placeId = id;
+    const p = PLACES.find(x => x.id === id);
+    S.meal.local = p ? p.nome : null;
+    const sc = $app.querySelector(".scroll"), y = sc ? sc.scrollTop : 0;
+    $app.innerHTML = SCREENS[S.screen]();
+    const sc2 = $app.querySelector(".scroll"); if (sc2) sc2.scrollTop = y;
+    toast(p ? `Local salvo: ${p.nome}` : "Salvo sem local", IC.map);
+  },
+  mode: (m) => { S.camMode = m; render(); },
+  shoot,
+  demoShot: () => analyzePhoto(true),
+  cancelAnalyze: () => { S.screen = "camera"; render(); },
+  retryAnalyze: () => { if (S.photo) { S.camMode = S.anMode || "prato"; analyzePhoto(); } else { S.screen = "camera"; render(); } },
+  camPrato: () => { S.camMode = "prato"; S.screen = "camera"; render(); },
+  save: () => {
+    const lvBefore = level().n;
+    const existing = mealOfDay(S.day);
+    if (existing) S.meals.splice(S.meals.indexOf(existing), 1); // um almoço por dia
+    S.meals.push(S.meal); S.xp += 20; S.demoIdx++;
+    const gained = checkMissions();
+    S.viewing = S.meals.length - 1; S.meal = S.meals[S.viewing]; S.photo = null; S.backTo = "hoje";
+    render(); celebrate(gained, lvBefore);
+  },
+  view: (i) => { S.viewing = +i; S.meal = S.meals[+i]; S.backTo = S.screen === "hoje" ? "hoje" : "historico"; S.screen = "resultado"; render(); },
+  nextDay: () => { S.day++; S.camMode = "prato"; render(); toast(`Novo dia: ${dayInfo(S.day).long}`, IC.hist); },
+  saveSnack: () => { S.xp += 10; S.camMode = "prato"; S.screen = "hoje"; render(); const k = S.label && S.label.nutrientes && S.label.nutrientes.energia_kcal; toast(`Lanche registrado${k && !S.semNumeros ? " · " + Math.round(k) + " kcal" : ""} · +10 XP`); },
+  edit: (ix) => editSheet(ix),
+  addItem: () => toast("Busca na base TACO (protótipo)", IC.info),
+  addManual: () => toast("Registro manual por busca (protótipo)", IC.info),
+  fb: (v) => { S.xp += 5; persist(); toast(v === "1" ? "Valeu! +5 XP" : "Toque no item para corrigir · +5 XP"); },
+  lia: () => lia(),
+  healthLog: () => healthSheet(),
+  toggleNum: () => { S.semNumeros = !S.semNumeros; render(); toast(S.semNumeros ? "Modo sem números ligado" : "Números de volta"); },
+  editGoal: () => goalSheet(),
+  closeLayer: () => closeLayer(),
+  closeGo: (s) => { closeLayer(); S.screen = s; render(); },
+  noop: () => toast("Ação de protótipo", IC.info),
+  reset: () => { try { localStorage.removeItem(STORE); } catch (e) {} S = fresh(); closeLayer(); render(); toast("Protótipo reiniciado"); }
+};
+
+document.addEventListener("click", (e) => {
+  const stop = e.target.closest("[data-stop]");
+  const el = e.target.closest("[data-a]");
+  if (!el) return;
+  if (stop && !stop.contains(el)) return;
+  if (stop && el.classList.contains("overlay")) return;
+  const [name, arg] = el.dataset.a.split(":");
+  if (ACTIONS[name]) { e.preventDefault(); ACTIONS[name](arg); }
+});
+document.addEventListener("change", (e) => {
+  if ((e.target.id === "filepick" || e.target.id === "filecap") && e.target.files[0]) {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        S.photo = shrinkToDataURL(img, img.width, img.height);
+        analyzePhoto();
+      };
+      img.onerror = () => toast("Não consegui abrir essa imagem", IC.info);
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(e.target.files[0]);
+  }
+});
+
+/* =========================================================
+   NOTAS DE DESIGN (painel lateral no desktop)
+   ========================================================= */
+const NOTES = {
+  home: { t:"Home atual (Home App - 3C) + Health Scan", n:[
+    ["Fiel ao app","Réplica da artboard Home App - 3C: carteiras, saldos, ações, banner, Perto de você e Novidades."],
+    ["Entradas","Card do Health Scan após as ações rápidas e um tile Novo em Novidades para você."],
+    ["Pluxee Health Scan","Nome do app e chamada focada em saúde e controle de calorias. Um único CTA: fotografar."],
+    ["Sem cravar local","O card não afirma onde a pessoa está. O local é confirmado depois da foto, por geolocalização."],
+    ["Push","Janela de almoço (11h30 a 14h) ou após uso do Refeição. Copy com nome e sequência, sem restaurante."],
+    ["Hiperpersonalização","Nome, sequência e progresso da missão no próprio card."],
+    ["LIA","Mascote oficial da LIA nas entradas e no chat. Sugestão do cardápio antes de pedir."]]},
+  hoje: { t:"Hoje · painel pessoal", n:[
+    ["Começa vazio","Na primeira visita só existe o convite para a primeira foto e a lista Primeiros passos. Tudo o mais é liberado pelo uso."],
+    ["Desbloqueios","Meta diária aparece ao definir objetivo; kcal ativas ao informar os passos; insights com 3 almoços."],
+    ["Nível e pontos","XP mede engajamento e define o nível. Pontos acumulam a cada registro e missão."],
+    ["Anel","Meta diária vem do objetivo de peso (aba Saúde) e soma kcal ativas estimadas pelos passos informados."],
+    ["Almoço pendente","Slot vazio vira convite para fotografar, não culpa. O local entra depois, se a pessoa quiser."],
+    ["Insights","Padrões reais do histórico (ex.: quintas acima da meta). Sempre com tom de sugestão."],
+    ["Cross-sell","Saldo Alimentação no jantar e rede Pluxee com selo Prato Leve: conecta a feature ao core do negócio."]]},
+  camera: { t:"Câmera · 3 modos", n:[
+    ["Viewfinder direto","Abre a câmera na hora, sem tela de upload. Dicas viram chips sobre o visor."],
+    ["Localização","Chip avisa que há restaurantes perto. A confirmação do local vem depois da foto, sem atrito antes do clique."],
+    ["Cardápio","Inspirado no Namu Nutri: ler o cardápio antes de pedir e ranquear pela meta."],
+    ["Rótulo","Leitura da lupa frontal ANVISA (ALTO EM) e tabela nutricional."],
+    ["Galeria","Funciona de verdade neste protótipo: escolha uma foto para ver no fluxo."]]},
+  analisando: { t:"Análise", n:[
+    ["Transparência","Passos explicam o que a IA faz e geram expectativa. Cerca de 3 s."],
+    ["Integração","Hoje é mock. Em produção chama a função analyze-food (Gemini 2.5 Flash, base TACO) que já existe no projeto Lovable."]]},
+  resultado: { t:"Resultado", n:[
+    ["Onde você está?","3 sugestões por geolocalização + Nenhum desses. O escolhido vai para os dados do escaneamento e aparece no histórico."],
+    ["Meta do almoço","Total comparado à meta do almoço, não do dia. Linguagem neutra: dentro ou acima."],
+    ["Cores no prato","Métrica positiva de variedade que alimenta missões. Celebra o que entrou no prato."],
+    ["Confiança","Itens abaixo de 60% pedem revisão. Corrigir rende XP e treina a IA."],
+    ["Recompensa","Salvar dispara celebração com XP, sequência, pontos do time e medalha."]]},
+  historico: { t:"Histórico", n:[
+    ["Onde fotografou","Cada registro mostra o local escolhido na hora da foto. Sem local, aparece Local não informado."],
+    ["Meta visível","Linha tracejada da meta do almoço no gráfico."],
+    ["Excluir","Swipe para excluir, como no protótipo original."]]},
+  missoes: { t:"Missões e recompensas", n:[
+    ["Camadas","Diárias (hábito), semanais (variedade), desafio entre times (social) e medalhas (coleção)."],
+    ["Sequência justa","Fins de semana não contam e existe protetor de sequência. Evita frustração e abandono."],
+    ["Times, não pessoas","Ranking só por time da empresa. Ninguém vê o prato de ninguém."],
+    ["Medalhas","Coleção visível com bloqueadas em tracejado, pra criar vontade de completar."]]},
+  saude: { t:"Saúde · dados e objetivo", n:[
+    ["Privacidade primeiro","Primeiro bloco da tela: o RH nunca vê. Dado de saúde é sensível pela LGPD."],
+    ["Fontes","Apple Saúde, Health Connect, Samsung, Garmin e balança. Consentimento granular por tipo de dado."],
+    ["Objetivo","Peso meta com ritmo saudável define a meta diária e a do almoço."],
+    ["Modo sem números","Esconde calorias em todo o app e troca por cores e equilíbrio. Cuidado com relação ruim com comida."]]},
+  cardapio: { t:"Cardápio · antes de pedir", n:[
+    ["Momento novo","Ajuda a decidir antes de pedir, não só a registrar depois."],
+    ["Ranking","Ordenado pela meta restante e pelas missões ativas. Tags neutras."]]},
+  rotulo: { t:"Rótulo", n:[
+    ["Explicação humana","Traduz o selo em uma frase útil e sugere troca sem julgar."]]}
+};
+function renderNotes() {
+  const n = NOTES[S.screen] || NOTES.home;
+  document.getElementById("notes").innerHTML = `
+    <h2>Pluxee Health Scan · wireframe</h2>
+    <div class="sub">Notas da tela: <b>${n.t}</b></div>
+    <ol>${n.n.map(([tag, txt]) => `<li><span class="tag">${tag}</span>${txt}</li>`).join("")}</ol>
+    <div class="jump"><div class="sub" style="margin-bottom:6px">Ir para tela</div>
+      ${[["home","0. Home Pluxee"],["hoje","1. Hoje"],["camera","2. Câmera"],["resultado","4. Resultado"],["historico","5. Histórico"],["missoes","6. Missões"],["saude","7. Saúde"],["cardapio","8. Cardápio"],["rotulo","9. Rótulo"]].map(([s,l])=>`<button data-a="jump:${s}">${l}</button>`).join("")}
+      <div class="sub" style="margin:12px 0 6px">Simulação</div>
+      <button data-a="nextDay">Avançar para o próximo dia (${dayInfo(S.day + 1).short})</button>
+      <button data-a="reset">Reiniciar protótipo (estado vazio)</button>
+      <p class="sub" style="margin-top:8px">Dia atual: <b>${dayInfo(S.day).long}</b> · ${S.meals.length} almoços · ${S.xp} XP · ${S.badges.length} medalhas</p>
+    </div>
+    <p class="sub" style="margin-top:16px">DS Pluxee aplicado a partir do Figma (tokens plx/semantic). Fonte do DS: TT Travels; aqui usamos DM Sans como substituta até a licença ser carregada.</p>`;
+}
+ACTIONS.jump = (s) => {
+  closeLayer();
+  if (s === "resultado") {
+    if (S.meals.length) { S.viewing = S.meals.length - 1; S.meal = S.meals[S.viewing]; S.backTo = "historico"; }
+    else { S.meal = null; S.viewing = null; }
+  }
+  S.screen = s; render();
+};
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+function render() {
+  document.querySelectorAll(".push").forEach(p => p.remove());
+  $app.innerHTML = SCREENS[S.screen]();
+  const sc = $app.querySelector(".scroll"); if (sc) sc.scrollTop = 0;
+  if (S.screen === "camera") { if (!CAM.error) startCamera(); } else { stopCamera(); CAM.error = null; }
+  persist();
+  if (S.screen === "home" && !S.pushShown && !registeredToday()) {
+    S.pushShown = true;
+    setTimeout(() => {
+      if (S.screen !== "home") return;
+      const p = document.createElement("div");
+      p.className = "push";
+      p.innerHTML = `<div class="app"><i></i>PLUXEE · agora</div><b style="font-size:14px">Bom almoço, ${USER.nome}!</b><div class="muted" style="font-size:13px">Abre o Pluxee Health Scan, fotografa seu prato e ${streak() ? `chega a ${streak() + 1} dias seguidos` : "comece sua sequência hoje"}.</div>`;
+      p.onclick = () => { p.remove(); S.screen = "camera"; render(); };
+      document.getElementById("phone").appendChild(p);
+      setTimeout(() => p.remove(), 6000);
+    }, 1200);
+  }
+}
+render();
+</script>
+</body>
+</html>

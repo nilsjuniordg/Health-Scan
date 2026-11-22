@@ -1,0 +1,56 @@
+PLUXEE HEALTH SCAN · protótipo navegável
+
+ARQUIVOS
+index.html            versão com o Design System Pluxee aplicado
+index-wireframe.html  versão anterior em tons de cinza (referência)
+
+COMO SUBIR NA HOSTINGER
+1. hPanel > Arquivos > Gerenciador de arquivos > public_html (ou uma subpasta, ex.: /meal-scan)
+2. Envie index.html, a pasta assets, .htaccess e robots.txt (o index-wireframe.html é opcional)
+3. Recomendado: hPanel > Avançado > Proteger diretórios com senha
+
+DESIGN SYSTEM
+Tokens lidos do Figma (arquivo CMS Wordpress App, página Pluxee App, coleção plx/semantic).
+Estão no bloco :root do topo do index.html.
+Fonte: o DS usa TT Travels (licenciada). Para usar, hospede os arquivos da fonte junto e
+declare um @font-face com o nome "TT Travels"; até lá a página cai para DM Sans (Google Fonts).
+
+COMO O PROTÓTIPO FUNCIONA (estado vazio)
+O app começa vazio e vai se preenchendo com o uso:
+1. Primeira foto: libera histórico, nível, sequência e a medalha Primeira foto.
+2. Definir objetivo (Saúde): libera a meta diária e a comparação com a meta do almoço.
+3. Conectar app ou relógio: libera passos, kcal ativas, evolução de peso e a missão de passos.
+4. 3 almoços: libera os insights. Missões da semana dão medalhas (Arco-íris, Explorador, Sequência 5, Dez almoços).
+Cada foto simula um prato diferente. Para simular a sequência, use "Protótipo · simular próximo dia"
+no painel Hoje. O progresso fica salvo no navegador;
+"Apagar meus dados e recomeçar" (aba Saúde) volta ao estado vazio.
+
+ONDE FICAM OS DADOS
+Tudo fica no armazenamento local do navegador (localStorage), chave "pluxee_meal_scan_v2".
+Quem abrir o link de novo no mesmo navegador e aparelho encontra o progresso como deixou:
+almoços, fotos enviadas (reduzidas para ~640 px), local, XP, medalhas, objetivo e apps conectados.
+Os dados não saem do aparelho e não são compartilhados entre pessoas ou dispositivos.
+Aba anônima, outro navegador ou limpar dados do site começa do zero.
+
+ANÁLISE POR IA (backend próprio, PHP na Hostinger)
+Prato, rótulo e cardápio são lidos pela IA através de api/analyze.php.
+Para ativar (o config.php já vem pronto, com Gemini e o domínio ofertasconsumer.com.br):
+1. Gere uma chave grátis no Google AI Studio: https://aistudio.google.com/apikey
+2. Na Hostinger, Gerenciador de arquivos > pasta api > botão direito em config.php > Editar.
+3. Troque COLE_SUA_CHAVE_AQUI pela chave (mantenha as aspas) e salve.
+Se o domínio for outro, ajuste a linha allowed_hosts no mesmo arquivo.
+A chave fica só no servidor, nunca vai para o navegador. O config.php é bloqueado pelo .htaccess.
+Sem o config.php, o prato ainda tenta a função antiga do Lovable (instável) e rótulo/cardápio mostram erro.
+
+CÂMERA
+No celular, a câmera abre ao vivo dentro do app (precisa de https, que a Hostinger já tem).
+Se a pessoa negar a permissão ou o navegador não suportar, aparece o botão
+"Abrir câmera do celular", que usa a câmera nativa. A galeria continua disponível.
+
+CRÉDITOS DAS FOTOS DE PRATOS (assets/pratos, via Wikimedia Commons)
+hoje.jpg  "Prato com arroz e feijão, frango grelhado, batata frita, salada e ovo frito" · Tet · CC0
+qui.jpg   "Feijoada à brasileira -02" · Bradleyzm · CC BY-SA 4.0
+qua.jpg   "Bife acebolado na casa da Vi" · Fernando Cesar Nox · CC BY 2.0
+ter.jpg   "Herbed Crusted Grilled Fish ... Mash Potato" · Vikramdewangan22889 · CC BY-SA 4.0
+seg.jpg   "Prato bem feito" · Lucia H Clark · CC BY-SA 3.0
+Fotos recortadas e reduzidas. Para uso fora do protótipo, troque por fotos próprias ou de banco licenciado.
