@@ -4,7 +4,7 @@ ARQUIVOS
 index.html            versão com o Design System Pluxee aplicado
 index-wireframe.html  versão anterior em tons de cinza (referência)
 
-COMO SUBIR NA HOSTINGER
+POC HOSPEDADA NA HOSTINGER (https://plx-ofertasconsumer.com.br/healthscan/index.html)
 1. hPanel > Arquivos > Gerenciador de arquivos > public_html (ou uma subpasta, ex.: /meal-scan)
 2. Envie index.html, a pasta assets, .htaccess e robots.txt (o index-wireframe.html é opcional)
 3. Recomendado: hPanel > Avançado > Proteger diretórios com senha
